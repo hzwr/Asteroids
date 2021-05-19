@@ -148,16 +148,13 @@ void Game::ProcessInput()
 	// Get state of keyboard
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	
-	/*mIsUpdatingActors = true;
+	mIsUpdatingActors = true;
 	for (auto actor : mActors)
 	{
 		actor->ProcessInput(state);
 	}
 	mIsUpdatingActors = false;
-	*/
-	mPlayer->ProcessKeyboard(state);
-
-
+	
 	// If escape is pressed, also end loop
 	if (state[SDL_SCANCODE_ESCAPE])
 	{
