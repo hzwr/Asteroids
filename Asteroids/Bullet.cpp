@@ -8,7 +8,7 @@
 
 Bullet::Bullet(Game *game, float rotation)
 	:Actor(game)
-	,mTimer(1.0f)
+	,mTimer(1.5f)
 {
 
 	// Move component

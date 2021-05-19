@@ -3,9 +3,11 @@
 #include "Game.h"
 #include "InputComponent.h"
 #include "WireframeComponent.h"
+#include "Bullet.h"
 
 Player::Player(Game *game)
 	:Actor(game)
+	,mWeaponCooldown(0.0f)
 {
 	//AnimSpriteComponent *anim = new AnimSpriteComponent(this);
 	//std::vector<SDL_Texture *> textures = {
@@ -32,4 +34,16 @@ Player::Player(Game *game)
 
 void Player::UpdateActor(float deltaTime)
 {
+	mWeaponCooldown -= deltaTime;
+}
+
+void Player::ActorInput(const uint8_t *keyState)
+{
+	if (keyState[SDL_SCANCODE_SPACE] && mWeaponCooldown <= 0.0f)
+	{
+		Bullet *bullet = new Bullet(GetGame(), mRotation);
+		bullet->mPosition = mPosition;	// Instantiate a bullet at the ship's postition
+	
+		mWeaponCooldown = 0.5f;
+	}
 }

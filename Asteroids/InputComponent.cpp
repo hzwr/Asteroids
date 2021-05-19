@@ -28,13 +28,6 @@ void InputComponent::ProcessInput(const uint8_t *keyState)
 		
 	}
 
-	if (keyState[mFireKey])
-	{
-		Bullet *bullet = new Bullet(mOwner->GetGame(), mOwner->mRotation);
-		bullet->mPosition = mOwner->mPosition;	// Instantiate a bullet at the ship's postition
-	}
-
-
 	// Calculate angular speed for MoveComponent
 	float angularSpeed = 0.0f;
 	if (keyState[mClockwiseKey])
