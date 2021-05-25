@@ -8,6 +8,9 @@
 #include "WireframeComponent.h"
 #include "Player.h"
 #include "Asteroid.h"
+#include "ColliderComponent.h"
+#include "Font.h"
+#include "Renderer.h"
 
 
 Game::Game()
@@ -19,6 +22,7 @@ Game::Game()
 ,goal(nullptr)
 ,mIsPathFound(false)
 ,world(48,27,nullptr)
+,mGameState(GameState::ERunning)
 {
 
 	
@@ -31,13 +35,8 @@ Game::~Game()
 
 bool Game::Initialize()
 {
-	// Initialize SDL
-	int sdlResult = SDL_Init(SDL_INIT_VIDEO);
-	if (sdlResult != 0)
-	{
-		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-		return false;
-	}
+	// Create renderer
+	mRenderer = new Renderer(this);
 	
 	// Create an SDL Window
 	mWindow = SDL_CreateWindow(
@@ -55,22 +54,22 @@ bool Game::Initialize()
 		return false;
 	}
 	
-	//// Create SDL renderer
-	mRenderer = SDL_CreateRenderer(
-		mWindow, // Window to create renderer for
-		-1,		 // Usually -1
-		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
-	);
 
-	// -----------------------------------------
-	world.mRenderer = mRenderer;
-	// -----------------------------------------
-
-	if (!mRenderer)
+	if (!mRenderer->Initialize(1920.0f, 1080.0f))
 	{
-		SDL_Log("Failed to create renderer: %s", SDL_GetError());
+		SDL_Log("Failed to initialize renderer");
+		delete mRenderer;
+		mRenderer = nullptr;
 		return false;
 	}
+
+	//// Create SDL renderer
+	//mRenderer = SDL_CreateRenderer(
+	//	mWindow, // Window to create renderer for
+	//	-1,		 // Usually -1
+	//	SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
+	//);
+
 
 	if (IMG_Init(IMG_INIT_PNG) == 0)
 	{
@@ -90,7 +89,7 @@ bool Game::Initialize()
 
 	// Create player - ship
 	mPlayer = new Player(this);
-	mPlayer->mPosition = Vector2(100.0f, 384.0f);
+	mPlayer->mPosition = Vector2(810.0f, 500.0f);
 	mPlayer->mScale = 1.5f;
 	mPlayer->mRotation = Math::PiOver2;
 
@@ -212,25 +211,27 @@ void Game::UpdateGame()
 	{
 		delete actor;
 	}
+
+	if (mGameState == GameState::ERunning)
+	{
+		// Check collision
+		for (auto asteroid : mAsteroids)
+		{
+			if (Intersect(*(mPlayer->GetCollider()), *(asteroid->GetCollider())))
+			{
+				mPlayer->mState = ActorState::EDead;
+				mGameState = GameState::EGameover;
+				break;
+				//mIsRunning = false;
+			}
+		}
+	}
+
 }
 
 void Game::GenerateOutput()
 {
-	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
-	SDL_RenderClear(mRenderer);
-	for (auto sprite : mSprites)
-	{
-		sprite->Draw(mRenderer);
-	}
-	
-	// Draw ships (and asteroids)
-	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-	for (auto wireframe : mWireframes)
-	{
-		wireframe->Draw(mRenderer);
-	}
-	SDL_RenderPresent(mRenderer);
-
+	mRenderer->Draw();
 }
 
 void Game::Shutdown()
@@ -242,7 +243,10 @@ void Game::Shutdown()
 	}
 
 	TTF_Quit();
-	SDL_DestroyRenderer(mRenderer);
+	if (mRenderer)
+	{
+		mRenderer->Shutdown();
+	}
 	SDL_DestroyWindow(mWindow);
 	SDL_Quit();
 }
@@ -293,32 +297,6 @@ void Game::RemoveAsteroid(Asteroid *a)
 	}
 }
 
-void Game::AddSprite(SpriteComponent *sprite)
-{
-	int myDrawOrder = sprite->mDrawOrder;
-	auto iter = mSprites.begin();
-	for (;
-		iter != mSprites.end();
-		++iter)
-	{
-		if (myDrawOrder < (*iter)->mDrawOrder)
-		{
-			break;
-		}
-	}
-	mSprites.insert(iter, sprite);
-
-}
-
-void Game::RemoveSprite(SpriteComponent *sprite)
-{
-	// Assume we can always find the sprite
-	// ?
-	// Need check
-	auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
-	mSprites.erase(iter);
-}
-
 void Game::AddWireframe(WireframeComponent *wireframe)
 {
 	int myDrawOrder = wireframe->mDrawOrder;
@@ -344,6 +322,35 @@ void Game::RemoveWireframe(WireframeComponent *wireframe)
 	mWireframes.erase(iter);
 }
 
+Font *Game::GetFont(const std::string &fileName)
+{
+	// Check if the font is in the map
+	auto iter = mFonts.find(fileName);
+	if (iter == mFonts.end())
+	{
+		// If not found, load the font
+		Font *font = new Font(this);
+		if (font->Load(fileName))
+		{
+			mFonts.emplace(fileName, font);
+		}
+		else
+		{
+			font->Unload();
+			delete font;
+			font = nullptr;
+		}
+		return font;
+	}
+
+	return nullptr;
+}
+
+void Game::PushUI(UIScreen *screen)
+{
+	mUIStack.emplace_back(screen);
+}
+
 SDL_Texture *LoadTexture(SDL_Renderer *renderer, const std::string& fileName)
 {
 	SDL_Surface *surface = IMG_Load(fileName.c_str());
@@ -365,29 +372,11 @@ SDL_Texture *LoadTexture(SDL_Renderer *renderer, const std::string& fileName)
 	return texture;
 }
 
-SDL_Texture *Game::GetTexture(const std::string &fileName)
-{
-	// Check if the texture is already loaded into the map
-	SDL_Texture *texture = nullptr;
-	auto iter = mTextures.find(fileName);
-	if ( iter == mTextures.end())
-	{
-		// If not found, load the texture
-		texture = LoadTexture(mRenderer, fileName);
-	}
-	else
-	{
-		texture = iter->second;
-	}
-
-	return texture;
-}
-
-const std::string &Game::GetText(const std::string &key)
+const std::string &Game::GetText(const std::string &textKey)
 {
 	static std::string errorMsg("**KEY NOT FOUND**");
 	// Find this text in the map, if it exists
-	auto iter = mText.find(key);
+	auto iter = mText.find(textKey);
 	if (iter != mText.end())
 	{
 		return iter->second;

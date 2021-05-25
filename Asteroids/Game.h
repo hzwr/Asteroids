@@ -5,7 +5,12 @@
 #include "World.h"
 #include "Math.h"
 
-// Game class
+enum class GameState
+{
+	ERunning,
+	EGameover
+};
+
 class Game
 {
 public:
@@ -21,7 +26,6 @@ public:
 	//SDL_Renderer *GetRenderer() { return mRenderer; }
 
 	SDL_Texture *GetTexture(const std::string& fileName);
-	const std::string &GetText(const std::string &key);
 
 	void AddActor(class Actor *actor);
 	void RemoveActor(class Actor *actor);
@@ -29,15 +33,21 @@ public:
 	void AddAsteroid(class Asteroid *a);
 	void RemoveAsteroid(class Asteroid *a);
 
-	void AddSprite(class SpriteComponent *sprite);
-	void RemoveSprite(class SpriteComponent *sprite);
+	//void AddSprite(class SpriteComponent *sprite);
+	//void RemoveSprite(class SpriteComponent *sprite);
 
 	void AddWireframe(class WireframeComponent *wireframe);
 	void RemoveWireframe(class WireframeComponent *wireframe);
 
+	// UI
+	class Font *GetFont(const std::string& fileName);
+	const std::vector<class UIScreen *> &GetUIStack() { return mUIStack; }
+	void PushUI(class UIScreen *screen);
+
 	// Getter
 	std::vector<class Asteroid *> &GetAsteroids() { return mAsteroids; }
-
+	const std::string &GetText(const std::string &textKey);
+	class Renderer *GetRenderer() { return mRenderer; }
 
 private:
 	// Helper functions for the game loop
@@ -45,18 +55,20 @@ private:
 	void UpdateGame();
 	void GenerateOutput();
 
+	// Game State
+	GameState mGameState;
+
 	// Map of textures loaded
 	std::unordered_map<std::string, SDL_Texture *> mTextures;
 
 	// Window created by SDL
 	SDL_Window *mWindow;
 	// Renderer for 2D drawing
-	SDL_Renderer *mRenderer;
+	class Renderer *mRenderer;
 	// Number of ticks since start of game
 	Uint32 mTicksCount;
 	// Game should continue to run
 	bool mIsRunning;
-	std::unordered_map<std::string, std::string> mText;
 
 	// For pathfinding
 	World world;
@@ -75,4 +87,10 @@ private:
 	// Sprites for drawing
 	std::vector<class SpriteComponent *> mSprites;
 	std::vector<class WireframeComponent *> mWireframes;
+
+	// UI (fonts...)
+	std::unordered_map<std::string, class Font *> mFonts; // <Filename, Font pointer>
+	std::unordered_map<std::string, std::string> mText; // Actual texts
+
+	std::vector<class UIScreen *> mUIStack;
 };

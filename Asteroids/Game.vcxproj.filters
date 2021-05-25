@@ -61,6 +61,18 @@
     <ClCompile Include="Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -84,5 +96,9 @@
     <ClInclude Include="WireframeComponent.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="ColliderComponent.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="UIScreen.h" />
+    <ClInclude Include="Renderer.h" />
   </ItemGroup>
 </Project>

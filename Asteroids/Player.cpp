@@ -4,10 +4,13 @@
 #include "InputComponent.h"
 #include "WireframeComponent.h"
 #include "Bullet.h"
+#include "ColliderComponent.h"
+#include "Asteroid.h"
 
 Player::Player(Game *game)
 	:Actor(game)
 	,mWeaponCooldown(0.0f)
+	,mCollider(nullptr)
 {
 	//AnimSpriteComponent *anim = new AnimSpriteComponent(this);
 	//std::vector<SDL_Texture *> textures = {
@@ -30,6 +33,10 @@ Player::Player(Game *game)
 	input->mCounterClockwiseKey = SDL_SCANCODE_A;
 	input->mMaxForwardSpeed = 30.0f;
 	input->mMaxAngularSpeed = Math::TwoPi;
+
+	// Collider component
+	mCollider = new ColliderComponent(this);
+	mCollider->mRadius = 24.0f;
 }
 
 void Player::UpdateActor(float deltaTime)
