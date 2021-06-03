@@ -11,7 +11,8 @@
 #include "ColliderComponent.h"
 #include "Font.h"
 #include "Renderer.h"
-
+#include "VertexArray.h"
+#include <GL/glew.h>
 
 Game::Game()
 :mWindow(nullptr)
@@ -23,6 +24,9 @@ Game::Game()
 ,mIsPathFound(false)
 ,world(48,27,nullptr)
 ,mGameState(GameState::ERunning)
+,mPlayer(nullptr)
+,mIsUpdatingActors(false)
+,mSpriteVerts(nullptr)
 {
 
 	
@@ -231,7 +235,29 @@ void Game::UpdateGame()
 
 void Game::GenerateOutput()
 {
+	CreateSpriteVerts();
 	mRenderer->Draw();
+}
+
+void Game::CreateSpriteVerts()
+{
+	float positions[9] = {
+		-0.5f, -0.5f, 0.0f,
+		 0.0f,  0.0f, 0.0f,
+		 0.5f, -0.5f, 0.0f
+	};
+
+	unsigned int indices[3] = {
+		0,
+		1,
+		2
+	};
+
+	mSpriteVerts = new VertexArray(
+		positions,
+		4,
+		indices,
+		6);
 }
 
 void Game::Shutdown()

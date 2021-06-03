@@ -31,6 +31,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="UIScreen.cpp" />
+    <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="WireframeComponent.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
@@ -54,6 +55,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="UIScreen.h" />
+    <ClInclude Include="VertexArray.h" />
     <ClInclude Include="WireframeComponent.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>

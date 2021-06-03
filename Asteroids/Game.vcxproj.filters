@@ -73,6 +73,9 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VertexArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -100,5 +103,6 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="UIScreen.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="VertexArray.h" />
   </ItemGroup>
 </Project>

@@ -16,4 +16,3 @@ public:
 	int mTexWidth;
 	int mTexHeight;
 };
-

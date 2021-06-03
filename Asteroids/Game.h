@@ -54,6 +54,8 @@ private:
 	void ProcessInput();
 	void UpdateGame();
 	void GenerateOutput();
+	void CreateSpriteVerts();
+
 
 	// Game State
 	GameState mGameState;
@@ -86,6 +88,7 @@ private:
 
 	// Sprites for drawing
 	std::vector<class SpriteComponent *> mSprites;
+	class VertexArray *mSpriteVerts;
 	std::vector<class WireframeComponent *> mWireframes;
 
 	// UI (fonts...)

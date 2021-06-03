@@ -80,7 +80,7 @@ void Renderer::Shutdown()
 void Renderer::Draw()
 {
 	// Set the clear color to white
-	glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	// Clear the color buffer
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -93,6 +93,8 @@ void Renderer::Draw()
 	//{
 	//	wireframe->Draw(mRenderer);
 	//}
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	// Swap the buffers
 	SDL_GL_SwapWindow(mMainWindow);
