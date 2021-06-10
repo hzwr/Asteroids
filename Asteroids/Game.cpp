@@ -104,6 +104,8 @@ bool Game::Initialize()
 		new Asteroid(this);
 	}
 
+	CreateSpriteVerts();
+	
 	return true;
 
 }
@@ -235,22 +237,21 @@ void Game::UpdateGame()
 
 void Game::GenerateOutput()
 {
-	CreateSpriteVerts();
 	mRenderer->Draw();
 }
 
 void Game::CreateSpriteVerts()
 {
-	float positions[9] = {
+	float positions[] = {
 		-0.5f, -0.5f, 0.0f,
-		 0.0f,  0.0f, 0.0f,
-		 0.5f, -0.5f, 0.0f
+		 0.5f, -0.5f, 0.0f,
+		 0.5f,  0.5f, 0.0f,
+		-0.5f,  0.5f, 0.0f 
 	};
 
-	unsigned int indices[3] = {
-		0,
-		1,
-		2
+	unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0
 	};
 
 	mSpriteVerts = new VertexArray(

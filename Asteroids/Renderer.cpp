@@ -2,10 +2,122 @@
 #include "Texture.h"
 #include "SpriteComponent.h"
 #include <GL/glew.h>
+#include <iostream>
 
+#include <fstream>
+#include <sstream>
+
+
+struct ShaderProgramSource
+{
+	std::string VertexSource;
+	std::string FragmentSource;
+};
+
+static ShaderProgramSource ParseShader(const std::string &filepath)
+{
+	std::ifstream stream(filepath); // Open the file
+
+	enum class ShaderType
+	{
+		NONE = -1,
+		VERTEX = 0,
+		FRAGMENT = 1
+	};
+
+	std::string line;
+	std::stringstream ss[2];
+	ShaderType type = ShaderType::NONE;
+
+	while (getline(stream, line))
+	{
+		if (line.find("#shader") != std::string::npos)
+		{
+			if (line.find("vertex") != std::string::npos)
+			{
+				type = ShaderType::VERTEX;
+			}
+			else if (line.find("fragment") != std::string::npos)
+			{
+				type = ShaderType::FRAGMENT;
+			}
+		}
+		else
+		{
+			ss[(int)type] << line << '\n';
+		}
+	}
+
+	return { ss[0].str(), ss[1].str() };
+}
+
+static unsigned int CompileShader(unsigned int type, const std::string &source)
+{
+	unsigned int id = glCreateShader(type);
+	const char *src = source.c_str();
+	glShaderSource(id, 1, &src, nullptr);
+	glCompileShader(id);
+
+	// Error handling
+	int result;
+	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+	if (result == GL_FALSE)
+	{
+		int length;
+		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+		char *message = (char *)alloca(length * sizeof(char));
+		glGetShaderInfoLog(id, length, &length, message);
+		std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex " : "fragment ") << "shader" << std::endl;
+		std::cout << message << std::endl;
+		glDeleteShader(id);
+		return 0;
+	}
+
+	return id;
+}
+
+static unsigned int CreateShaderProgram(const std::string &vertexShader, const std::string &fragmentShader)
+{
+	unsigned int program = glCreateProgram();
+	unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
+	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glLinkProgram(program);
+	glValidateProgram(program);
+
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+
+	return program;
+
+}
+
+
+void GLClearError()
+{
+	// Clear errors
+	while (glGetError() != GL_NO_ERROR);
+
+}
+
+bool GLLogCall(const char *function, const char *file, int line)
+{
+	while (GLenum error = glGetError())
+	{
+		std::cout << "[OpenGL Error] (" << error << ") " << function << " Line " << line << std::endl;
+		return false;
+	}
+
+	return true;
+}
 
 Renderer::Renderer(Game *game)
 	:mGame(game)
+	,m_shaderProgram(0)
+	,m_r(0.0f)
+	,m_increment(0.05f)
 {
 }
 
@@ -27,8 +139,8 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 
 	// Use OpenGL's core profile
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	// Specify version 3.3
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	// Specify version 4.3
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	// Request a color buffer with 8-bits per RGBA channel
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
@@ -68,21 +180,45 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 	// so clear it
 	glGetError();
 
+
+	ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
+	m_shaderProgram = CreateShaderProgram(source.VertexSource, source.FragmentSource);
+	GLCall(glUseProgram(m_shaderProgram));
+
+
 	return true;
 }
 
 void Renderer::Shutdown()
 {
+	GLCall(glDeleteProgram(m_shaderProgram));
 	SDL_GL_DeleteContext(mMainContext);
 	SDL_DestroyWindow(mMainWindow);
 }
 
 void Renderer::Draw()
 {
-	// Set the clear color to white
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	// Set the clear color to black
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	// Clear the color buffer
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	if (m_r > 1.0f)
+	{
+		m_increment = -0.05f;
+	}
+	else if (m_r < 0.0f)
+	{
+		m_increment = 0.05f;
+	}
+
+	m_r += m_increment;
+
+
+	GLCall(int location = glGetUniformLocation(m_shaderProgram, "u_Color"));
+	// assert
+	// ...
+	GLCall(glUniform4f(location, m_r, 0.3f, 0.8f, 1.0f));
 
 	//for (auto sprite : mSprites)
 	//{
@@ -94,7 +230,7 @@ void Renderer::Draw()
 	//	wireframe->Draw(mRenderer);
 	//}
 
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
 	// Swap the buffers
 	SDL_GL_SwapWindow(mMainWindow);

@@ -8,10 +8,11 @@ public:
 
 	void SetActive();
 private:
-	unsigned int mNumVerts;
-	unsigned int nNumIndices;	
-	unsigned int mVertexBuffer; // ID of vertex buffer
-	unsigned int mIndexBuffer;	// ID of index buffer
-	unsigned int mVertexArray; // OpenGL ID of VAO
+	unsigned int m_NumVerts;
+	unsigned int m_NumIndices;	
+
+	unsigned int m_VertexBuffer; // ID of vertex buffer
+	unsigned int m_IndexBuffer;	// ID of index buffer
+	unsigned int m_VAO; // OpenGL ID of VAO
 };
 

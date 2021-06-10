@@ -1,9 +1,9 @@
 #include "Game.h"
 #include "Search.h"
+#include <iostream>
 
 int main(int argc, char** argv)
 {
-
 	Game game;
 	bool success = game.Initialize();
 	if (success)
