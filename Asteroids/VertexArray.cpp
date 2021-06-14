@@ -11,44 +11,8 @@ VertexArray::VertexArray(const float *verts, unsigned int numVerts,
 {
 	// Allocate and assign a VAO to our handle
 	GLCall(glGenVertexArrays(1, &m_VAO));
-	// Bind our VAO as the current used object
-	GLCall(glBindVertexArray(m_VAO));
-
-	// Create vertex buffer
-	GLCall(glGenBuffers(1, &m_VertexBuffer));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer));
-	// Copy verts data into the vertex buffer
-	GLCall(glBufferData(
-		GL_ARRAY_BUFFER,				// Specify a currently bound buffer type to write to
-		numVerts * 3 * sizeof(float),	// Number of bytes (x, y, z)
-		verts,							// Source to copy from
-		GL_STATIC_DRAW					// Usage: load the data once and use it frequently for drawing
-	));
-
-	// Create index buffer
-	GLCall(glGenBuffers(1, &m_IndexBuffer));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer));
-	GLCall(glBufferData(
-		GL_ELEMENT_ARRAY_BUFFER,
-		numIndices * sizeof(unsigned int),
-		indices,
-		GL_STATIC_DRAW
-	));
-
-	// Specify vertex attributes
-	GLCall(glEnableVertexAttribArray(0));
-	GLCall(glVertexAttribPointer(
-		0,					// Attribute index 	
-		3,					// Number of components
-		GL_FLOAT,			// Type of the components
-		GL_FALSE,			// Normalized
-		sizeof(float) * 3,	// Stride between each vertex
-		0));				// Offset from start of vertex attribute
 
 
-
-	
-	
 	//int programDeleteStatus;
 	//glGetProgramiv(shaderProgram, GL_DELETE_STATUS, &programDeleteStatus);
 	//if (programDeleteStatus == GL_TRUE)
@@ -59,15 +23,44 @@ VertexArray::VertexArray(const float *verts, unsigned int numVerts,
 
 VertexArray::~VertexArray()
 {
-	GLCall(glDeleteBuffers(1, &m_VertexBuffer));
-	GLCall(glDeleteBuffers(1, &m_IndexBuffer));
 	GLCall(glDeleteVertexArrays(1, &m_VAO));
-
 	//glDeleteProgram(shader);
+}
+
+void VertexArray::Bind() const
+{
+	// Bind our VAO as the current used object
+	GLCall(glBindVertexArray(m_VAO));
+}
+
+void VertexArray::Unbind() const
+{
+	GLCall(glBindVertexArray(0));
 }
 
 void VertexArray::SetActive()
 {
 	// Specify which vertex array we are currently using
 	GLCall(glBindVertexArray(m_VAO));
+}
+
+void VertexArray::AddBuffer(const VertexBuffer &vb, const VertexBufferLayout &layout)
+{
+	Bind();
+	vb.Bind();
+	const auto &elements = layout.GetElements();
+	unsigned int offset = 0;
+	for (unsigned int i = 0; i < elements.size(); ++i)
+	{
+		const auto &element = elements[i];
+		GLCall(glEnableVertexAttribArray(i));
+		GLCall(glVertexAttribPointer(
+			i,							// Attribute index 	
+			element.count,				// Number of components
+			element.type,				// Type of the components
+			element.normalized,			// Normalized
+			layout.GetStride(),			// Stride between each vertex
+			(const void *)offset))		// Offset from start of vertex attribute
+		offset += element.count * VertexBufferElement::GetSizeOfType(element.type);
+	}
 }

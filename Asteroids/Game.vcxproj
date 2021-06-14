@@ -20,6 +20,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Math.cpp" />
@@ -32,6 +33,8 @@
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="UIScreen.cpp" />
     <ClCompile Include="VertexArray.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="VertexBufferLayout.cpp" />
     <ClCompile Include="WireframeComponent.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
@@ -45,6 +48,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MoveComponent.h" />
@@ -56,6 +60,8 @@
     <ClInclude Include="Tile.h" />
     <ClInclude Include="UIScreen.h" />
     <ClInclude Include="VertexArray.h" />
+    <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="VertexBufferLayout.h" />
     <ClInclude Include="WireframeComponent.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>

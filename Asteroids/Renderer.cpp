@@ -3,9 +3,9 @@
 #include "SpriteComponent.h"
 #include <GL/glew.h>
 #include <iostream>
-
 #include <fstream>
 #include <sstream>
+
 
 
 struct ShaderProgramSource
@@ -164,7 +164,7 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 	// Create OpenGL context and attach it to our window
 	mMainContext = SDL_GL_CreateContext(mMainWindow);
 
-	/* This makes our buffer swap syncronized with the monitor's vertical refresh */
+	/* This makes our buffer swap synchronized with the monitor's vertical refresh */
 	//SDL_GL_SetSwapInterval(1);
 	
 
@@ -179,6 +179,8 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 	// On some platforms, GLEW will emit a benign error code,
 	// so clear it
 	glGetError();
+
+
 
 
 	ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");

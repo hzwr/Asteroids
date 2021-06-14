@@ -6,6 +6,9 @@
 #include "Math.h"
 #include <GL/glew.h>
 
+//-----------------------------------------------------------------------------
+// Error checking for OpenGL calls
+//-----------------------------------------------------------------------------
 #define ASSERT(x) if(!(x)) __debugbreak();
 #define GLCall(x) GLClearError();\
 	x;\
@@ -13,6 +16,8 @@
 
 void GLClearError();
 bool GLLogCall(const char *function, const char *file, int line);
+//-----------------------------------------------------------------------------
+
 
 class Renderer
 {

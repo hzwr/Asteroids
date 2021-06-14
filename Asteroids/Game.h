@@ -88,7 +88,7 @@ private:
 
 	// Sprites for drawing
 	std::vector<class SpriteComponent *> mSprites;
-	class VertexArray *mSpriteVerts;
+	class VertexArray *m_VAO;
 	std::vector<class WireframeComponent *> mWireframes;
 
 	// UI (fonts...)
