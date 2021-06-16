@@ -268,10 +268,13 @@ void Game::CreateSpriteVerts()
 	VertexBuffer vb(positions, 4 * 3 * sizeof(float));
 	// Specify vertex attributes
 	// Create and bind index buffer
-	IndexBuffer ib(indices, 6);
 	VertexBufferLayout layout;
 	layout.Push<float>(3);
+	
 	m_VAO->AddBuffer(vb, layout);
+	
+	
+	IndexBuffer ib(indices, 6); // bind array element buffer
 
 }
 
