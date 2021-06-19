@@ -6,13 +6,19 @@
 #include "Math.h"
 #include <GL/glew.h>
 
+//-----------------------------------------------------------------------------
+// Error checking for OpenGL calls
+//-----------------------------------------------------------------------------
 #define ASSERT(x) if(!(x)) __debugbreak();
+
 #define GLCall(x) GLClearError();\
 	x;\
 	ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
 void GLClearError();
 bool GLLogCall(const char *function, const char *file, int line);
+//-----------------------------------------------------------------------------
+
 
 class Renderer
 {
@@ -51,7 +57,7 @@ private:
 	// OpenGL context handle
 	SDL_GLContext mMainContext;
 	unsigned int m_shaderProgram;
-
+	class Shader *m_shader;
 	// Animate square
 	float m_r; // color's r value
 	float m_increment;

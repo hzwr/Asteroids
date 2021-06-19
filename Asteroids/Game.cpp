@@ -10,9 +10,13 @@
 #include "Asteroid.h"
 #include "ColliderComponent.h"
 #include "Font.h"
+
+#include <GL/glew.h>
 #include "Renderer.h"
 #include "VertexArray.h"
-#include <GL/glew.h>
+#include "VertexBuffer.h""
+#include "IndexBuffer.h"
+#include "VertexBufferLayout.h"
 
 Game::Game()
 :mWindow(nullptr)
@@ -26,7 +30,7 @@ Game::Game()
 ,mGameState(GameState::ERunning)
 ,mPlayer(nullptr)
 ,mIsUpdatingActors(false)
-,mSpriteVerts(nullptr)
+,m_VAO(nullptr)
 {
 
 	
@@ -104,7 +108,9 @@ bool Game::Initialize()
 		new Asteroid(this);
 	}
 
-	CreateSpriteVerts();
+	// Create VAO
+	CreateSpriteVerts(); 
+
 	
 	return true;
 
@@ -165,9 +171,6 @@ void Game::ProcessInput()
 	{
 		mIsRunning = false;
 	}
-	
-
-
 }
 
 void Game::UpdateGame()
@@ -254,15 +257,36 @@ void Game::CreateSpriteVerts()
 		2, 3, 0
 	};
 
-	mSpriteVerts = new VertexArray(
+	// Create VAO
+	m_VAO = new VertexArray(
 		positions,
 		4,
 		indices,
 		6);
+
+	// Create and bind vertex buffer
+	
+	VertexBuffer vb(positions, 4 * 3 * sizeof(float));
+	// Specify vertex attributes
+	// Create and bind index buffer
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+	
+	// Bind VAO and add vertex buffer to it
+	m_VAO->AddBuffer(vb, layout);
+
+	// Bind array element buffer after VAO is bound
+	// This information is stored in VAO
+	// If no VAO is bound, you cannot bind a index buffer object 
+	IndexBuffer ib(indices, 6); 
+
+	
 }
 
 void Game::Shutdown()
 {
+	// TODO: delete buffers
+
 	// Delete actors
 	while (!mActors.empty())
 	{
