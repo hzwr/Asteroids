@@ -85,6 +85,9 @@
     <ClCompile Include="VertexBufferLayout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -116,6 +119,7 @@
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="VertexBufferLayout.h" />
+    <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />

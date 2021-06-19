@@ -265,21 +265,28 @@ void Game::CreateSpriteVerts()
 		6);
 
 	// Create and bind vertex buffer
+	
 	VertexBuffer vb(positions, 4 * 3 * sizeof(float));
 	// Specify vertex attributes
 	// Create and bind index buffer
 	VertexBufferLayout layout;
 	layout.Push<float>(3);
 	
+	// Bind VAO and add vertex buffer to it
 	m_VAO->AddBuffer(vb, layout);
-	
-	
-	IndexBuffer ib(indices, 6); // bind array element buffer
 
+	// Bind array element buffer after VAO is bound
+	// This information is stored in VAO
+	// If no VAO is bound, you cannot bind a index buffer object 
+	IndexBuffer ib(indices, 6); 
+
+	
 }
 
 void Game::Shutdown()
 {
+	// TODO: delete buffers
+
 	// Delete actors
 	while (!mActors.empty())
 	{
