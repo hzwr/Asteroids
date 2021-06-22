@@ -3,9 +3,10 @@
 #include <SOIL/SOIL.h>
 #include <GL/glew.h>
 #include <SDL/SDL.h>
+#include "Renderer.h"
 
 Texture::Texture()
-	:mTextureID(0)
+	:m_textureID(0)
 	, mWidth(0)
 	, mHeight(0)
 {
@@ -36,24 +37,28 @@ bool Texture::Load(const std::string &fileName)
 		format = GL_RGBA;
 	}
 
-	glGenTextures(1, &mTextureID);
-	glBindTexture(GL_TEXTURE_2D, mTextureID);
+	GLCall(glGenTextures(1, &m_textureID));
+	GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
 
-	glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format,
-		GL_UNSIGNED_BYTE, image);
+	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format,
+		GL_UNSIGNED_BYTE, image));
 
 	SOIL_free_image_data(image);
 
 	// Enable linear filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+	// Wrap mode
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+
 
 	return true;
 }
 
 void Texture::Unload()
 {
-	glDeleteTextures(1, &mTextureID);
+	GLCall(glDeleteTextures(1, &m_textureID));
 }
 
 void Texture::CreateFromSurface(SDL_Surface *surface)
@@ -62,17 +67,28 @@ void Texture::CreateFromSurface(SDL_Surface *surface)
 	mHeight = surface->h;
 
 	// Generate a GL texture
-	glGenTextures(1, &mTextureID);
-	glBindTexture(GL_TEXTURE_2D, mTextureID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_BGRA,
-		GL_UNSIGNED_BYTE, surface->pixels);
+	GLCall(glGenTextures(1, &m_textureID));
+	GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
+	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_BGRA,
+		GL_UNSIGNED_BYTE, surface->pixels));
 
 	// Use linear filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 }
 
 void Texture::SetActive()
 {
-	glBindTexture(GL_TEXTURE_2D, mTextureID);
+	GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
+}
+
+void Texture::Bind(unsigned int slot /*= 0*/) const
+{
+	GLCall(glActiveTexture(GL_TEXTURE0 + slot));
+	GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
+}
+
+void Texture::Unbind() const
+{
+	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }

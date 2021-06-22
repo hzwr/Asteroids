@@ -61,7 +61,7 @@ private:
 	GameState mGameState;
 
 	// Map of textures loaded
-	std::unordered_map<std::string, SDL_Texture *> mTextures;
+	std::unordered_map<std::string, class Texture *> mTextures;
 
 	// Window created by SDL
 	SDL_Window *mWindow;

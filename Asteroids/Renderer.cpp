@@ -92,9 +92,18 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 	// so clear it
 	glGetError();
 
+	// GL blend
+	GLCall(glEnable(GL_BLEND));
+	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
 	m_shader = new Shader("res/shaders/Basic.shader");
 	m_shader->Bind();
-	m_shader->SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+	m_shader->SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
+
+	Texture texture;
+	texture.Load("Assets/Ship01.png");
+	texture.Bind(); // slot 0
+	m_shader->SetUniform1i("u_texture", 0);
 
 	return true;
 }
@@ -129,7 +138,7 @@ void Renderer::Draw()
 
 	m_r += m_increment;
 
-	m_shader->SetUniform4f("u_Color", m_r, 0.3f, 0.8f, 1.0f);
+	m_shader->SetUniform4f("u_color", m_r, 0.3f, 0.8f, 1.0f);
 
 	//for (auto sprite : mSprites)
 	//{

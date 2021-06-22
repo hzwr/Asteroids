@@ -110,7 +110,6 @@ bool Game::Initialize()
 
 	// Create VAO
 	CreateSpriteVerts(); 
-
 	
 	return true;
 
@@ -246,10 +245,10 @@ void Game::GenerateOutput()
 void Game::CreateSpriteVerts()
 {
 	float positions[] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f 
+		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f 
 	};
 
 	unsigned int indices[] = {
@@ -266,11 +265,12 @@ void Game::CreateSpriteVerts()
 
 	// Create and bind vertex buffer
 	
-	VertexBuffer vb(positions, 4 * 3 * sizeof(float));
+	VertexBuffer vb(positions, 4 * 5 * sizeof(float));
 	// Specify vertex attributes
 	// Create and bind index buffer
 	VertexBufferLayout layout;
 	layout.Push<float>(3);
+	layout.Push<float>(2);
 	
 	// Bind VAO and add vertex buffer to it
 	m_VAO->AddBuffer(vb, layout);
@@ -402,7 +402,7 @@ void Game::PushUI(UIScreen *screen)
 	mUIStack.emplace_back(screen);
 }
 
-SDL_Texture *LoadTexture(SDL_Renderer *renderer, const std::string& fileName)
+SDL_Texture *LoadTexture(SDL_Renderer *renderer, const std::string &fileName)
 {
 	SDL_Surface *surface = IMG_Load(fileName.c_str());
 	if (!surface)
