@@ -1,6 +1,6 @@
 #include "WireframeComponent.h"
-#include "Actor.h"
-#include "Game.h"
+#include "../Actor.h"
+#include "../../../Game.h"
 
 WireframeComponent::WireframeComponent(Actor *owner, int drawOrder)
 	:Component(owner)

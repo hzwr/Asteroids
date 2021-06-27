@@ -1,5 +1,5 @@
 #include "ColliderComponent.h"
-#include "Actor.h"
+#include "../Actor.h"
 
 
 ColliderComponent::ColliderComponent(Actor *owner)

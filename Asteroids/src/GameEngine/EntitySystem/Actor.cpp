@@ -1,5 +1,5 @@
 #include "Actor.h"
-#include "Game.h"
+#include "../../Game.h"
 #include "Component.h"
 
 Actor::Actor(Game *game)

@@ -7,119 +7,119 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp">
+    <ClCompile Include="src\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tile.cpp">
+    <ClCompile Include="src\Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Search.cpp">
+    <ClCompile Include="src\Search.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="World.cpp">
+    <ClCompile Include="src\World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Canvas.cpp">
+    <ClCompile Include="src\Canvas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Actor.cpp">
+    <ClCompile Include="src\GameEngine\EntitySystem\Actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
+    <ClCompile Include="src\GameEngine\EntitySystem\Component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteComponent.cpp">
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\SpriteComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AnimSpriteComponent.cpp">
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\AnimSpriteComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="src\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MoveComponent.cpp">
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\MoveComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Asteroid.cpp">
+    <ClCompile Include="src\Asteroid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InputComponent.cpp">
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\InputComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WireframeComponent.cpp">
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\WireframeComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
+    <ClCompile Include="src\Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ColliderComponent.cpp">
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\ColliderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Math.cpp">
+    <ClCompile Include="src\Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Font.cpp">
+    <ClCompile Include="src\Font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
+    <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UIScreen.cpp">
+    <ClCompile Include="src\UIScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
+    <ClCompile Include="src\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VertexArray.cpp">
+    <ClCompile Include="src\VertexArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VertexBuffer.cpp">
+    <ClCompile Include="src\VertexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IndexBuffer.cpp">
+    <ClCompile Include="src\IndexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VertexBufferLayout.cpp">
+    <ClCompile Include="src\VertexBufferLayout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
+    <ClCompile Include="src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="src\Game.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tile.h">
+    <ClInclude Include="src\Tile.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Search.h" />
-    <ClInclude Include="World.h" />
-    <ClInclude Include="Math.h" />
-    <ClInclude Include="Canvas.h" />
-    <ClInclude Include="Actor.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="SpriteComponent.h" />
-    <ClInclude Include="AnimSpriteComponent.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="MoveComponent.h" />
-    <ClInclude Include="Asteroid.h" />
-    <ClInclude Include="InputComponent.h" />
-    <ClInclude Include="WireframeComponent.h" />
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="ColliderComponent.h" />
-    <ClInclude Include="Font.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="UIScreen.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="VertexArray.h" />
-    <ClInclude Include="VertexBuffer.h" />
-    <ClInclude Include="IndexBuffer.h" />
-    <ClInclude Include="VertexBufferLayout.h" />
-    <ClInclude Include="Shader.h" />
+    <ClInclude Include="src\Search.h" />
+    <ClInclude Include="src\World.h" />
+    <ClInclude Include="src\Math.h" />
+    <ClInclude Include="src\Canvas.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Actor.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Component.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\SpriteComponent.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\AnimSpriteComponent.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\MoveComponent.h" />
+    <ClInclude Include="src\Asteroid.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\InputComponent.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\WireframeComponent.h" />
+    <ClInclude Include="src\Bullet.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\ColliderComponent.h" />
+    <ClInclude Include="src\Font.h" />
+    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\UIScreen.h" />
+    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\VertexArray.h" />
+    <ClInclude Include="src\VertexBuffer.h" />
+    <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\VertexBufferLayout.h" />
+    <ClInclude Include="src\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />

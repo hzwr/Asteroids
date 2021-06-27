@@ -1,5 +1,5 @@
 #include "InputComponent.h"
-#include "Bullet.h"
+#include "../../../Bullet.h"
 
 InputComponent::InputComponent(class Actor *owner)
 	:MoveComponent(owner)

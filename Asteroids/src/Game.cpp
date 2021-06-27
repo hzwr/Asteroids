@@ -3,12 +3,12 @@
 #include <iostream>
 #include <SDL/SDL_ttf.h>
 #include "SDL/SDL_image.h"
-#include "Actor.h"
-#include "SpriteComponent.h"
-#include "WireframeComponent.h"
+#include "GameEngine\EntitySystem\Actor.h"
+#include "GameEngine\EntitySystem\Components\SpriteComponent.h"
+#include "GameEngine\EntitySystem\Components\WireframeComponent.h"
 #include "Player.h"
 #include "Asteroid.h"
-#include "ColliderComponent.h"
+#include "GameEngine\EntitySystem\Components\ColliderComponent.h"
 #include "Font.h"
 
 #include <GL/glew.h>

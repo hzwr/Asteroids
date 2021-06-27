@@ -1,10 +1,10 @@
 #include "Asteroid.h"
-#include "MoveComponent.h"
-#include "SpriteComponent.h"
+#include "GameEngine\EntitySystem\Components\MoveComponent.h"
+#include "GameEngine\EntitySystem\Components\SpriteComponent.h"
 #include "Game.h"
 #include <random>
-#include "WireframeComponent.h"
-#include "ColliderComponent.h"
+#include "GameEngine\EntitySystem\Components\WireframeComponent.h"
+#include "GameEngine\EntitySystem\Components\ColliderComponent.h"
 
 const int Pi = 3.1415926535f;
 

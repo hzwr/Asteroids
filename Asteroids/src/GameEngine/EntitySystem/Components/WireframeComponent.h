@@ -1,6 +1,6 @@
 #pragma once
-#include "Math.h"
-#include "Component.h"
+#include "../../../Math.h"
+#include "../Component.h"
 #include "SDL/SDL.h"
 #include <vector>
 

@@ -1,9 +1,9 @@
 #include "Bullet.h"
-#include "MoveComponent.h"
+#include "GameEngine\EntitySystem\Components\MoveComponent.h"
 #include "Game.h"
-#include "WireframeComponent.h"
+#include "GameEngine\EntitySystem\Components\WireframeComponent.h"
 #include "Math.h"
-#include "ColliderComponent.h"
+#include "GameEngine\EntitySystem\Components\ColliderComponent.h"
 #include "Asteroid.h"
 
 Bullet::Bullet(Game *game, float rotation)

@@ -1,6 +1,6 @@
 #include "Renderer.h"
 #include "Texture.h"
-#include "SpriteComponent.h"
+#include "GameEngine\EntitySystem\Components\SpriteComponent.h"
 #include <GL/glew.h>
 #include <iostream>
 #include <fstream>

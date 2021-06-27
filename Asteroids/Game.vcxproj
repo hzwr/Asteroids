@@ -11,61 +11,61 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="AnimSpriteComponent.cpp" />
-    <ClCompile Include="Asteroid.cpp" />
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Canvas.cpp" />
-    <ClCompile Include="ColliderComponent.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="Font.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="IndexBuffer.cpp" />
-    <ClCompile Include="InputComponent.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Math.cpp" />
-    <ClCompile Include="MoveComponent.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Search.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="SpriteComponent.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Tile.cpp" />
-    <ClCompile Include="UIScreen.cpp" />
-    <ClCompile Include="VertexArray.cpp" />
-    <ClCompile Include="VertexBuffer.cpp" />
-    <ClCompile Include="VertexBufferLayout.cpp" />
-    <ClCompile Include="WireframeComponent.cpp" />
-    <ClCompile Include="World.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\Actor.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\AnimSpriteComponent.cpp" />
+    <ClCompile Include="src\Asteroid.cpp" />
+    <ClCompile Include="src\Bullet.cpp" />
+    <ClCompile Include="src\Canvas.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\ColliderComponent.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\Component.cpp" />
+    <ClCompile Include="src\Font.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\IndexBuffer.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\InputComponent.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Math.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\MoveComponent.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\Search.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\SpriteComponent.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\Tile.cpp" />
+    <ClCompile Include="src\UIScreen.cpp" />
+    <ClCompile Include="src\VertexArray.cpp" />
+    <ClCompile Include="src\VertexBuffer.cpp" />
+    <ClCompile Include="src\VertexBufferLayout.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\WireframeComponent.cpp" />
+    <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor.h" />
-    <ClInclude Include="AnimSpriteComponent.h" />
-    <ClInclude Include="Asteroid.h" />
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="Canvas.h" />
-    <ClInclude Include="ColliderComponent.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="Font.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="IndexBuffer.h" />
-    <ClInclude Include="InputComponent.h" />
-    <ClInclude Include="Math.h" />
-    <ClInclude Include="MoveComponent.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Search.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="SpriteComponent.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Tile.h" />
-    <ClInclude Include="UIScreen.h" />
-    <ClInclude Include="VertexArray.h" />
-    <ClInclude Include="VertexBuffer.h" />
-    <ClInclude Include="VertexBufferLayout.h" />
-    <ClInclude Include="WireframeComponent.h" />
-    <ClInclude Include="World.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Actor.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\AnimSpriteComponent.h" />
+    <ClInclude Include="src\Asteroid.h" />
+    <ClInclude Include="src\Bullet.h" />
+    <ClInclude Include="src\Canvas.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\ColliderComponent.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Component.h" />
+    <ClInclude Include="src\Font.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\InputComponent.h" />
+    <ClInclude Include="src\Math.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\MoveComponent.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\Search.h" />
+    <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\SpriteComponent.h" />
+    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Tile.h" />
+    <ClInclude Include="src\UIScreen.h" />
+    <ClInclude Include="src\VertexArray.h" />
+    <ClInclude Include="src\VertexBuffer.h" />
+    <ClInclude Include="src\VertexBufferLayout.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\WireframeComponent.h" />
+    <ClInclude Include="src\World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -114,7 +114,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\external\SDL\include;..\external\GLEW\include;..\external\SOIL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\;..\external\SDL\include;..\external\GLEW\include;..\external\SOIL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <ExceptionHandling>Sync</ExceptionHandling>
     </ClCompile>

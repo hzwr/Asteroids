@@ -1,5 +1,5 @@
 #pragma once
-#include "Actor.h"
+#include "GameEngine\EntitySystem\Actor.h"
 
 class Player :
     public Actor

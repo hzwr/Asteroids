@@ -1,5 +1,5 @@
 #include "MoveComponent.h"
-#include "Actor.h"
+#include "../Actor.h"
 #include <iostream>
 #include <string>
 

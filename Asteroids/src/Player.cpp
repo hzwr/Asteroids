@@ -1,10 +1,10 @@
 #include "Player.h"
-#include "AnimSpriteComponent.h"
+#include "GameEngine\EntitySystem\Components\AnimSpriteComponent.h"
 #include "Game.h"
-#include "InputComponent.h"
-#include "WireframeComponent.h"
+#include "GameEngine\EntitySystem\Components\InputComponent.h"
+#include "GameEngine\EntitySystem\Components\WireframeComponent.h"
 #include "Bullet.h"
-#include "ColliderComponent.h"
+#include "GameEngine\EntitySystem\Components\ColliderComponent.h"
 #include "Asteroid.h"
 
 Player::Player(Game *game)
