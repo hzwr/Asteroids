@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <windows.h>
+#include <malloc.h>
 
 Shader::Shader(const std::string &filePath)
 	: m_filePath(filePath)
@@ -108,16 +110,27 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string &source)
 
 	// Error handling
 	int result;
+	int errcode;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
 	if (result == GL_FALSE)
 	{
 		int length;
 		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-		char *message = (char *)alloca(length * sizeof(char));
-		glGetShaderInfoLog(id, length, &length, message);
-		std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex " : "fragment ") << "shader" << std::endl;
-		std::cout << message << std::endl;
-		glDeleteShader(id);
+		__try
+		{
+			char *message = (char *)_malloca(length * sizeof(char));
+			glGetShaderInfoLog(id, length, &length, message);
+			std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex " : "fragment ") << "shader" << std::endl;
+			std::cout << message << std::endl;
+			glDeleteShader(id);
+			_freea(message);
+		}
+		__except ((GetExceptionCode() == STATUS_STACK_OVERFLOW) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
+		{
+			errcode = _resetstkoflw();
+			// TODO: https://docs.microsoft.com/en-us/cpp/cpp/try-except-statement?view=msvc-160
+			// https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/resetstkoflw?view=msvc-160
+		}
 		return 0;
 	}
 

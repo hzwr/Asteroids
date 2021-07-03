@@ -8,12 +8,12 @@ public:
 	AnimSpriteComponent(class Actor *owner, int drawOrder = 100);
 	// Update animation every frame
 	void Update(float deltaTime) override;
-	void SetAnimTextures(const std::vector<SDL_Texture *> &textures);
+	void SetAnimTextures(const std::vector<class Texture *> &textures);
 
 	float mAnimFPS; // Use to control the speed of animation
 
 private:
-	std::vector<SDL_Texture *> mAnimTextures;
+	std::vector<class Texture *> mAnimTextures;
 	
 	// Tracks the current frame displayed as a float
 	// allow to keep track of how long that frame has displayed

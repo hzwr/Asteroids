@@ -3,12 +3,12 @@
 #include <iostream>
 #include <SDL/SDL_ttf.h>
 #include "SDL/SDL_image.h"
-#include "GameEngine\EntitySystem\Actor.h"
-#include "GameEngine\EntitySystem\Components\SpriteComponent.h"
-#include "GameEngine\EntitySystem\Components\WireframeComponent.h"
+#include "GameEngine/EntitySystem/Actor.h"
+#include "GameEngine/EntitySystem/Components/SpriteComponent.h"
+#include "GameEngine/EntitySystem/Components/WireframeComponent.h"
 #include "Player.h"
 #include "Asteroid.h"
-#include "GameEngine\EntitySystem\Components\ColliderComponent.h"
+#include "GameEngine/EntitySystem/Components/ColliderComponent.h"
 #include "Font.h"
 
 #include <GL/glew.h>
@@ -17,6 +17,8 @@
 #include "VertexBuffer.h""
 #include "IndexBuffer.h"
 #include "VertexBufferLayout.h"
+#include "Shader.h"
+#include "Texture.h"
 
 Game::Game()
 :mWindow(nullptr)
@@ -30,7 +32,6 @@ Game::Game()
 ,mGameState(GameState::ERunning)
 ,mPlayer(nullptr)
 ,mIsUpdatingActors(false)
-,m_VAO(nullptr)
 {
 
 	
@@ -45,7 +46,7 @@ bool Game::Initialize()
 {
 	// Create renderer
 	mRenderer = new Renderer(this);
-	
+
 	// Create an SDL Window
 	mWindow = SDL_CreateWindow(
 		"Game", // Window title
@@ -108,8 +109,7 @@ bool Game::Initialize()
 		new Asteroid(this);
 	}
 
-	// Create VAO
-	CreateSpriteVerts(); 
+
 	
 	return true;
 
@@ -242,46 +242,7 @@ void Game::GenerateOutput()
 	mRenderer->Draw();
 }
 
-void Game::CreateSpriteVerts()
-{
-	float positions[] = {
-		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f 
-	};
 
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	// Create VAO
-	m_VAO = new VertexArray(
-		positions,
-		4,
-		indices,
-		6);
-
-	// Create and bind vertex buffer
-	
-	VertexBuffer vb(positions, 4 * 5 * sizeof(float));
-	// Specify vertex attributes
-	// Create and bind index buffer
-	VertexBufferLayout layout;
-	layout.Push<float>(3);
-	layout.Push<float>(2);
-	
-	// Bind VAO and add vertex buffer to it
-	m_VAO->AddBuffer(vb, layout);
-
-	// Bind array element buffer after VAO is bound
-	// This information is stored in VAO
-	// If no VAO is bound, you cannot bind a index buffer object 
-	IndexBuffer ib(indices, 6); 
-
-	
-}
 
 void Game::Shutdown()
 {
@@ -294,6 +255,9 @@ void Game::Shutdown()
 	}
 
 	TTF_Quit();
+
+
+
 	if (mRenderer)
 	{
 		mRenderer->Shutdown();
@@ -436,4 +400,29 @@ const std::string &Game::GetText(const std::string &textKey)
 	{
 		return errorMsg;
 	}
+}
+
+
+Texture *Game::GetTexture(const std::string &fileName)
+{
+	Texture *tex = nullptr;
+	auto iter = mTextures.find(fileName);
+	if (iter != mTextures.end())
+	{
+		tex = iter->second;
+	}
+	else
+	{
+		tex = new Texture();
+		if (tex->Load(fileName))
+		{
+			mTextures.emplace(fileName, tex);
+		}
+		else
+		{
+			delete tex;
+			tex = nullptr;
+		}
+	}
+	return tex;
 }

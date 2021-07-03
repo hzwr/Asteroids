@@ -6,8 +6,7 @@
 #include "Renderer.h"
 
 Texture::Texture()
-	:m_textureID(0)
-	, mWidth(0)
+	: mWidth(0)
 	, mHeight(0)
 {
 
@@ -51,7 +50,6 @@ bool Texture::Load(const std::string &fileName)
 	// Wrap mode
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-
 
 	return true;
 }

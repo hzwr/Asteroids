@@ -6,6 +6,8 @@
 #include "Math.h"
 #include <GL/glew.h>
 
+
+
 //-----------------------------------------------------------------------------
 // Error checking for OpenGL calls
 //-----------------------------------------------------------------------------
@@ -35,17 +37,20 @@ public:
 	void AddSprite(class SpriteComponent *sprite);
 	void RemoveSprite(class SpriteComponent *sprite);
 
-	class Texture *GetTexture(const std::string &fileName);
-
 	float GetScreenWidth() const { return mScreenWidth; }
 	float GetScreenHeight() const { return mScreenHeight; }
 
 private:
+	void Renderer::CreateSpriteVerts();
+	void Renderer::LoadShaders();
+
 	// Map of textures loaded
 	std::unordered_map<std::string, class Texture *> mTextures;
 
 	// All the sprite components drawn
 	std::vector<class SpriteComponent *> mSprites;
+	class Shader *m_spriteShader;
+	class VertexArray *m_VAO;
 
 	class Game *mGame;
 	// Width/height of screen
@@ -56,8 +61,6 @@ private:
 	SDL_Window *mMainWindow;
 	// OpenGL context handle
 	SDL_GLContext mMainContext;
-	unsigned int m_shaderProgram;
-	class Shader *m_shader;
 	// Animate square
 	float m_r; // color's r value
 	float m_increment;

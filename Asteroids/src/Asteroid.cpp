@@ -1,8 +1,8 @@
 #include "Asteroid.h"
-#include "GameEngine\EntitySystem\Components\MoveComponent.h"
-#include "GameEngine\EntitySystem\Components\SpriteComponent.h"
 #include "Game.h"
 #include <random>
+#include "GameEngine\EntitySystem\Components\MoveComponent.h"
+#include "GameEngine\EntitySystem\Components\SpriteComponent.h"
 #include "GameEngine\EntitySystem\Components\WireframeComponent.h"
 #include "GameEngine\EntitySystem\Components\ColliderComponent.h"
 
@@ -36,8 +36,8 @@ Asteroid::Asteroid(Game *game)
 
 
 	// Sprite component
-	//SpriteComponent *spriteComponent = new SpriteComponent(this);
-	//spriteComponent->SetTexture(game->GetTexture("Assets/Asteroid.png"));
+	SpriteComponent *spriteComponent = new SpriteComponent(this);
+	spriteComponent->SetTexture(game->GetTexture("Assets/Asteroid.png"));
 
 	MoveComponent *moveComponent = new MoveComponent(this);
 	moveComponent->mVelocityVector = GetForward() * 150;

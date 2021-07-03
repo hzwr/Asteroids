@@ -6,12 +6,9 @@
 #include "Renderer.h"
 
 
-VertexArray::VertexArray(const float *verts, unsigned int numVerts,
-	const unsigned int *indices, unsigned int numIndices)
+VertexArray::VertexArray()
 {
-	// Allocate and assign a VAO to our handle
 	GLCall(glGenVertexArrays(1, &m_VAO));
-
 
 	//int programDeleteStatus;
 	//glGetProgramiv(shaderProgram, GL_DELETE_STATUS, &programDeleteStatus);
@@ -36,12 +33,6 @@ void VertexArray::Bind() const
 void VertexArray::Unbind() const
 {
 	GLCall(glBindVertexArray(0));
-}
-
-void VertexArray::SetActive()
-{
-	// Specify which vertex array we are currently using
-	GLCall(glBindVertexArray(m_VAO));
 }
 
 void VertexArray::AddBuffer(const VertexBuffer &vb, const VertexBufferLayout &layout)

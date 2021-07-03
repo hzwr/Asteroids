@@ -25,7 +25,7 @@ public:
 
 	//SDL_Renderer *GetRenderer() { return mRenderer; }
 
-	SDL_Texture *GetTexture(const std::string& fileName);
+	class Texture *GetTexture(const std::string& fileName);
 
 	void AddActor(class Actor *actor);
 	void RemoveActor(class Actor *actor);
@@ -54,8 +54,6 @@ private:
 	void ProcessInput();
 	void UpdateGame();
 	void GenerateOutput();
-	void CreateSpriteVerts();
-
 
 	// Game State
 	GameState mGameState;
@@ -88,7 +86,7 @@ private:
 
 	// Sprites for drawing
 	std::vector<class SpriteComponent *> mSprites;
-	class VertexArray *m_VAO;
+
 	std::vector<class WireframeComponent *> mWireframes;
 
 	// UI (fonts...)
