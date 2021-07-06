@@ -98,9 +98,9 @@ bool Game::Initialize()
 
 	// Create player - ship
 	mPlayer = new Player(this);
-	mPlayer->mPosition = Vector2(810.0f, 500.0f);
-	mPlayer->mScale = 1.5f;
-	mPlayer->mRotation = Math::PiOver2;
+	mPlayer->SetPosition(Vector2(810.0f, 500.0f));
+	mPlayer->SetScale(1.5f);
+	mPlayer->SetRotation(Math::PiOver2);
 
 	// Create asteroids
 	const int numAsteroids = 20;
@@ -202,6 +202,7 @@ void Game::UpdateGame()
 	// Move any pending actors to mActors
 	for (auto pending : mPendingActors)
 	{
+		pending->ComputeWorldTransform();
 		mActors.emplace_back(pending);
 	}
 	mPendingActors.clear();
@@ -209,7 +210,7 @@ void Game::UpdateGame()
 	std::vector<Actor *> deadActors;
 	for (auto actor : mActors)
 	{
-		if (actor->mState == ActorState::EDead)
+		if (actor->GetState() == ActorState::EDead)
 		{
 			deadActors.emplace_back(actor);
 		}
@@ -227,7 +228,7 @@ void Game::UpdateGame()
 		{
 			if (Intersect(*(mPlayer->GetCollider()), *(asteroid->GetCollider())))
 			{
-				mPlayer->mState = ActorState::EDead;
+				mPlayer->SetState(ActorState::EDead);
 				mGameState = GameState::EGameover;
 				break;
 				//mIsRunning = false;

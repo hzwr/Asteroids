@@ -21,13 +21,13 @@ void WireframeComponent::Draw(SDL_Renderer *renderer)
 		int numOfVertices = mVertices.size();
 		SDL_Point *points = new SDL_Point[numOfVertices];
 
-		Matrix3 rotationMatrix = Matrix3::CreateRotation(mOwner->mRotation - Math::PiOver2); // Original rotation is 90 degrees
+		Matrix3 rotationMatrix = Matrix3::CreateRotation(mOwner->GetRotation() - Math::PiOver2); // Original rotation is 90 degrees
 
 		for (int i = 0; i < numOfVertices; ++i)
 		{
 			Vector2 rotatedVertex = Vector2::Transform(mVertices[i], rotationMatrix);
-			points[i].x = mOwner->mPosition.x + static_cast<int>(rotatedVertex.x);
-			points[i].y = mOwner->mPosition.y + static_cast<int>(rotatedVertex.y);
+			points[i].x = mOwner->GetPosition().x + static_cast<int>(rotatedVertex.x);
+			points[i].y = mOwner->GetPosition().y + static_cast<int>(rotatedVertex.y);
 		}
 		
 		SDL_RenderDrawLines(renderer, points, numOfVertices);

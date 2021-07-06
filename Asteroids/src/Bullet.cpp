@@ -14,7 +14,7 @@ Bullet::Bullet(Game *game, float rotation)
 	// Move component
 	MoveComponent *move = new MoveComponent(this);
 	move->mForwardSpeed = 5.0f;
-	mRotation = rotation;
+	SetRotation(rotation);
 	move->mVelocityVector = GetForward() * 100;
 
 	// Wireframe component
@@ -40,15 +40,15 @@ void Bullet::UpdateActor(float deltaTime)
 	mTimer -= deltaTime;
 	if (mTimer <= 0.0f)
 	{
-		mState = ActorState::EDead;
+		SetState(ActorState::EDead);
 	}
 
 	for (auto asteroid : GetGame()->GetAsteroids())
 	{
 		if (Intersect(*mCollider, *(asteroid->GetCollider())))
 		{
-			mState = ActorState::EDead;
-			asteroid->mState = ActorState::EDead;
+			SetState(ActorState::EDead);
+			asteroid->SetState(ActorState::EDead);
 			break;
 		}
 	}

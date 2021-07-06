@@ -48,8 +48,8 @@ void Player::ActorInput(const uint8_t *keyState)
 {
 	if (keyState[SDL_SCANCODE_SPACE] && mWeaponCooldown <= 0.0f)
 	{
-		Bullet *bullet = new Bullet(GetGame(), mRotation);
-		bullet->mPosition = mPosition;	// Instantiate a bullet at the ship's postition
+		Bullet *bullet = new Bullet(GetGame(), GetRotation());
+		bullet->SetPosition(GetPosition());	// Instantiate a bullet at the ship's postition
 	
 		mWeaponCooldown = 0.5f;
 	}

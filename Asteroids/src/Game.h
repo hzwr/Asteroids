@@ -23,8 +23,6 @@ public:
 	// Shutdown the game
 	void Shutdown();
 
-	//SDL_Renderer *GetRenderer() { return mRenderer; }
-
 	class Texture *GetTexture(const std::string& fileName);
 
 	void AddActor(class Actor *actor);

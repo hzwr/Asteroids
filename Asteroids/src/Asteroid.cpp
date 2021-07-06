@@ -1,6 +1,6 @@
 #include "Asteroid.h"
 #include "Game.h"
-#include <random>
+#include "src/Vendor/Random.h"
 #include "GameEngine\EntitySystem\Components\MoveComponent.h"
 #include "GameEngine\EntitySystem\Components\SpriteComponent.h"
 #include "GameEngine\EntitySystem\Components\WireframeComponent.h"
@@ -13,15 +13,11 @@ Asteroid::Asteroid(Game *game)
 	,mCollider(nullptr)
 {
 	// Random position
-	mPosition.x = std::rand() % 1920; // movement will take care of wrapping, no need for %
-	mPosition.y = std::rand() % 1080;
+	Vector2 randPos = Random::GetVector(Vector2(-512.0f, -384.0f),
+		Vector2(512.0f, 384.0f)); 80;
+	SetPosition(randPos);
 
-	// Random rotation
-	std::random_device rd;
-	std::uniform_real_distribution<float> dist(0, 2 * Pi);
-	std::mt19937 sGenerator;
-	sGenerator.seed(rd());
-	mRotation = dist(sGenerator);
+	SetRotation(Random::GetFloatRange(0.0f, Math::TwoPi));
 
 	// Wireframe component
 	WireframeComponent *wireframe = new WireframeComponent(this);

@@ -3,14 +3,14 @@
 #include "Component.h"
 
 Actor::Actor(Game *game)
-	:mState(ActorState::EActive)
-	,mPosition(Vector2::Zero)
-	,mScale(1.0f)
-	,mRotation(0.0f)
+	:m_state(ActorState::EActive)
+	,m_position(Vector2::Zero)
+	,m_scale(1.0f)
+	,m_rotation(0.0f)
 	,mGame(game)
 {
 	mGame->AddActor(this);
-
+	m_recomputeWorldTransform = true;
 }
 
 Actor::~Actor()
@@ -18,24 +18,26 @@ Actor::~Actor()
 	mGame->RemoveActor(this);
 
 	// Delete components
-	while(!mComponents.empty())
+	while(!m_components.empty())
 	{
-		delete mComponents.back(); // ~Component calls RemoveComponent, remove itself from mComponents
+		delete m_components.back(); // ~Component calls RemoveComponent, remove itself from mComponents
 	}
 }
 
 void Actor::Update(float deltaTime)
 {
-	if (mState == ActorState::EActive)
+	if (m_state == ActorState::EActive)
 	{
+		ComputeWorldTransform();
 		UpdateComponents(deltaTime);
 		UpdateActor(deltaTime);
+		ComputeWorldTransform();
 	}
 }
 
 void Actor::UpdateComponents(float deltaTime)
 {
-	for (auto comp : mComponents)
+	for (auto comp : m_components)
 	{
 		comp->Update(deltaTime);
 	}
@@ -50,32 +52,32 @@ void Actor::AddComponent(Component *component)
 	// Add the component according to the update order
 	// Find the first component with a larger update order, and insert before that component
 	int myOrder = component->mUpdateOrder;
-	auto iter = mComponents.begin();
-	for ( ; iter != mComponents.end(); ++iter)
+	auto iter = m_components.begin();
+	for ( ; iter != m_components.end(); ++iter)
 	{
 		if (myOrder < (*iter)->mUpdateOrder)
 		{
 			break;
 		}
 	}
-	mComponents.insert(iter, component);
+	m_components.insert(iter, component);
 
 }
 
 void Actor::RemoveComponent(Component *component)
 {
-	auto iter = std::find(mComponents.begin(), mComponents.end(), component);
-	if (iter != mComponents.end())
+	auto iter = std::find(m_components.begin(), m_components.end(), component);
+	if (iter != m_components.end())
 	{
-		mComponents.erase(iter);
+		m_components.erase(iter);
 	}
 }
 
 void Actor::ProcessInput(const uint8_t *keyState)
 {
-	if (mState == ActorState::EActive)
+	if (m_state == ActorState::EActive)
 	{
-		for (auto comp : mComponents)
+		for (auto comp : m_components)
 		{
 			comp->ProcessInput(keyState);
 		}
@@ -85,4 +87,22 @@ void Actor::ProcessInput(const uint8_t *keyState)
 
 void Actor::ActorInput(const uint8_t *keyState)
 {
+}
+
+void Actor::ComputeWorldTransform()
+{
+	if (m_recomputeWorldTransform)
+	{
+		m_recomputeWorldTransform = false;
+		m_worldTransform = Matrix4::CreateScale(m_scale);
+		m_worldTransform *= Matrix4::CreateRotationZ(m_rotation);
+		m_worldTransform *= Matrix4::CreateTranslation(
+			Vector3(m_position.x, m_position.y, 0.0f)
+		);
+	}
+
+	for (auto component : m_components)
+	{
+		component->OnUpdateWorldTransform();
+	}
 }

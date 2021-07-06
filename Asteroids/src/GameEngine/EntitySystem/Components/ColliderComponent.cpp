@@ -10,7 +10,7 @@ ColliderComponent::ColliderComponent(Actor *owner)
 
 const Vector2 &ColliderComponent::GetCenter() const
 {
-    return mOwner->mPosition;
+    return mOwner->GetPosition();
 }
 
 bool Intersect(const ColliderComponent &a, const ColliderComponent &b)

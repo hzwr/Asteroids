@@ -58,7 +58,7 @@
     <ClCompile Include="src\GameEngine\EntitySystem\Components\ColliderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Math.cpp">
+    <ClCompile Include="src\Vendor\Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Font.cpp">
@@ -88,6 +88,9 @@
     <ClCompile Include="src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Vendor\Random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -98,7 +101,7 @@
     </ClInclude>
     <ClInclude Include="src\Search.h" />
     <ClInclude Include="src\World.h" />
-    <ClInclude Include="src\Math.h" />
+    <ClInclude Include="src\Vendor\Math.h" />
     <ClInclude Include="src\Canvas.h" />
     <ClInclude Include="src\GameEngine\EntitySystem\Actor.h" />
     <ClInclude Include="src\GameEngine\EntitySystem\Component.h" />
@@ -120,6 +123,7 @@
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\VertexBufferLayout.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Vendor\Random.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
