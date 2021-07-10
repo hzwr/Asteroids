@@ -7,6 +7,7 @@ public:
 	// Lower update order means higher priority 
 	Component(class Actor *owner, int updateOrder = 100);
 	virtual ~Component();
+	virtual void OnUpdateWorldTransform() { }
 	virtual void Update(float deltaTime);
 	virtual void ProcessInput(const uint8_t *keyState);
 	

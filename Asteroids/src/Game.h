@@ -3,7 +3,7 @@
 #include "Tile.h"
 #include "Search.h"
 #include "World.h"
-#include "Math.h"
+#include "src/Vendor/Math.h"
 
 enum class GameState
 {
@@ -22,8 +22,6 @@ public:
 	void RunLoop();
 	// Shutdown the game
 	void Shutdown();
-
-	//SDL_Renderer *GetRenderer() { return mRenderer; }
 
 	class Texture *GetTexture(const std::string& fileName);
 

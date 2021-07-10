@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../Math.h"
+#include "src/Vendor/Math.h"
 #include "../Component.h"
 #include "SDL/SDL.h"
 #include <vector>

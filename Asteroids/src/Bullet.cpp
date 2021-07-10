@@ -1,10 +1,11 @@
 #include "Bullet.h"
-#include "GameEngine\EntitySystem\Components\MoveComponent.h"
 #include "Game.h"
-#include "GameEngine\EntitySystem\Components\WireframeComponent.h"
 #include "Math.h"
-#include "GameEngine\EntitySystem\Components\ColliderComponent.h"
 #include "Asteroid.h"
+#include "GameEngine\EntitySystem\Components\MoveComponent.h"
+#include "GameEngine\EntitySystem\Components\WireframeComponent.h"
+#include "GameEngine\EntitySystem\Components\ColliderComponent.h"
+#include "GameEngine\EntitySystem\Components\SpriteComponent.h"
 
 Bullet::Bullet(Game *game, float rotation)
 	:Actor(game)
@@ -14,18 +15,22 @@ Bullet::Bullet(Game *game, float rotation)
 	// Move component
 	MoveComponent *move = new MoveComponent(this);
 	move->mForwardSpeed = 5.0f;
-	mRotation = rotation;
+	SetRotation(rotation);
 	move->mVelocityVector = GetForward() * 100;
 
+	// Sprite component
+	SpriteComponent *spriteComponent = new SpriteComponent(this);
+	spriteComponent->SetTexture(game->GetTexture("Assets/Laser.png"));
+
 	// Wireframe component
-	WireframeComponent *wireframe = new WireframeComponent(this);
-	int radius = 2;
-	int numOfVerts = 12;
-	for (int i = 0; i < numOfVerts; ++i)
-	{
-		float a = ((float)i / (float)numOfVerts) * Math::Pi * 2;
-		wireframe->mVertices.emplace_back(Vector2(radius * Math::Cos(a), -radius * Math::Sin(a)));
-	}
+	//WireframeComponent *wireframe = new WireframeComponent(this);
+	//int radius = 2;
+	//int numOfVerts = 12;
+	//for (int i = 0; i < numOfVerts; ++i)
+	//{
+	//	float a = ((float)i / (float)numOfVerts) * Math::Pi * 2;
+	//	wireframe->mVertices.emplace_back(Vector2(radius * Math::Cos(a), -radius * Math::Sin(a)));
+	//}
 
 	/*game->AddBullet*/
 	// TODO: ownership of the bullet?
@@ -40,15 +45,15 @@ void Bullet::UpdateActor(float deltaTime)
 	mTimer -= deltaTime;
 	if (mTimer <= 0.0f)
 	{
-		mState = ActorState::EDead;
+		SetState(ActorState::EDead);
 	}
 
 	for (auto asteroid : GetGame()->GetAsteroids())
 	{
 		if (Intersect(*mCollider, *(asteroid->GetCollider())))
 		{
-			mState = ActorState::EDead;
-			asteroid->mState = ActorState::EDead;
+			SetState(ActorState::EDead);
+			asteroid->SetState(ActorState::EDead);
 			break;
 		}
 	}

@@ -16,34 +16,38 @@ void MoveComponent::Update(float deltaTime)
 	// Update rotation
 	if (!Math::NearZero(mAngularSpeed))
 	{
-		mOwner->mRotation += mAngularSpeed * deltaTime;
+		float rotation = mOwner->GetRotation();
+		rotation += mAngularSpeed * deltaTime;
+		mOwner->SetRotation(rotation);
 		/*std::cout << std::to_string(mOwner->mRotation) << std::endl;*/
 	}
 
 	// Update position
 	if (!Math::NearZero(mVelocityVector.x * mVelocityVector.x + mVelocityVector.y * mVelocityVector.y))
 	{
-		Vector2 newPos = mOwner->mPosition + mVelocityVector * mForwardSpeed * deltaTime;
+		Vector2 pos = mOwner->GetPosition();
+		pos += mVelocityVector * mForwardSpeed * deltaTime;
+		
 		
 		// Screen wrapping
-		if (newPos.x < 0.0f)
+		if (pos.x < -960.0f)
 		{
-			newPos.x = 1918.0f;
+			pos.x = 958.0f;
 		}
-		else if (newPos.x > 1920.0f)
+		else if (pos.x > 960.0f)
 		{
-			newPos.x = 2.0f;
+			pos.x = -958.0f;
 		}
 
-		if (newPos.y < 0.0f)
+		if (pos.y < -540.0f)
 		{
-			newPos.y = 1078.0f;
+			pos.y = 538.0f;
 		}
-		else if (newPos.y > 1080.0f)
+		else if (pos.y > 540.0f)
 		{
-			newPos.y = 2.0f;
+			pos.y = -538.0f;
 		}
 		
-		mOwner->mPosition = newPos;
+		mOwner->SetPosition(pos);
 	}
 }

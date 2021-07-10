@@ -1,10 +1,10 @@
 #include "Asteroid.h"
 #include "Game.h"
-#include <random>
-#include "GameEngine\EntitySystem\Components\MoveComponent.h"
-#include "GameEngine\EntitySystem\Components\SpriteComponent.h"
-#include "GameEngine\EntitySystem\Components\WireframeComponent.h"
-#include "GameEngine\EntitySystem\Components\ColliderComponent.h"
+#include "src/Vendor/Random.h"
+#include "GameEngine/EntitySystem/Components/MoveComponent.h"
+#include "GameEngine/EntitySystem/Components/SpriteComponent.h"
+#include "GameEngine/EntitySystem/Components/WireframeComponent.h"
+#include "GameEngine/EntitySystem/Components/ColliderComponent.h"
 
 const int Pi = 3.1415926535f;
 
@@ -13,26 +13,24 @@ Asteroid::Asteroid(Game *game)
 	,mCollider(nullptr)
 {
 	// Random position
-	mPosition.x = std::rand() % 1920; // movement will take care of wrapping, no need for %
-	mPosition.y = std::rand() % 1080;
+	Vector2 randPos = Random::GetVector(Vector2(-960.0f, -540.0f),
+		Vector2(960.0f, 540.0f));
+	//Vector2 randPos(-960, -540);
+	//Vector2 randPos(0, 0);
+	SetPosition(randPos);
 
-	// Random rotation
-	std::random_device rd;
-	std::uniform_real_distribution<float> dist(0, 2 * Pi);
-	std::mt19937 sGenerator;
-	sGenerator.seed(rd());
-	mRotation = dist(sGenerator);
+	SetRotation(Random::GetFloatRange(0.0f, Math::TwoPi));
 
 	// Wireframe component
-	WireframeComponent *wireframe = new WireframeComponent(this);
+	//WireframeComponent *wireframe = new WireframeComponent(this);
 	int radius = 30;
-	int numOfVerts = 12;
-	for (int i = 0; i < numOfVerts; ++i)
-	{
-		float a = ((float)i / (float)numOfVerts) * Pi * 2;
-		wireframe->mVertices.emplace_back(Vector2(radius * Math::Cos(a), -radius * Math::Sin(a)));
-	}
-	wireframe->mVertices.emplace_back(wireframe->mVertices.front()); // Close the polygon
+	//int numOfVerts = 12;
+	//for (int i = 0; i < numOfVerts; ++i)
+	//{
+	//	float a = ((float)i / (float)numOfVerts) * Pi * 2;
+	//	wireframe->mVertices.emplace_back(Vector2(radius * Math::Cos(a), radius * Math::Sin(a)));
+	//}
+	//wireframe->mVertices.emplace_back(wireframe->mVertices.front()); // Close the polygon
 
 
 	// Sprite component

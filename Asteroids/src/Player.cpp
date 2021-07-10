@@ -21,9 +21,13 @@ Player::Player(Game *game)
 	//};
 	//anim->SetAnimTextures(textures);
 
+	// Sprite component
+	SpriteComponent *spriteComponent = new SpriteComponent(this);
+	spriteComponent->SetTexture(game->GetTexture("Assets/Ship.png"));
+
 	// Wireframe component
-	WireframeComponent *wireframe = new WireframeComponent(this);
-	wireframe->mVertices = { Vector2(0,-24), Vector2(18,24), Vector2(0,18), Vector2(-18,24), Vector2(0,-24) };
+	/*WireframeComponent *wireframe = new WireframeComponent(this);
+	wireframe->mVertices = { Vector2(0,-24), Vector2(18,24), Vector2(0,18), Vector2(-18,24), Vector2(0,-24) };*/
 
 	// Create input component
 	InputComponent *input = new InputComponent(this);
@@ -48,8 +52,8 @@ void Player::ActorInput(const uint8_t *keyState)
 {
 	if (keyState[SDL_SCANCODE_SPACE] && mWeaponCooldown <= 0.0f)
 	{
-		Bullet *bullet = new Bullet(GetGame(), mRotation);
-		bullet->mPosition = mPosition;	// Instantiate a bullet at the ship's postition
+		Bullet *bullet = new Bullet(GetGame(), GetRotation());
+		bullet->SetPosition(GetPosition());	// Instantiate a bullet at the ship's postition
 	
 		mWeaponCooldown = 0.5f;
 	}
