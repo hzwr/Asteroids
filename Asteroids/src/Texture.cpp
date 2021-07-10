@@ -39,9 +39,11 @@ bool Texture::Load(const std::string &fileName)
 	GLCall(glGenTextures(1, &m_textureID));
 	GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
 
+	// Copy image data to OpenGL
 	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format,
 		GL_UNSIGNED_BYTE, image));
 
+	// Free the image from memory
 	SOIL_free_image_data(image);
 
 	// Enable linear filtering
@@ -73,11 +75,6 @@ void Texture::CreateFromSurface(SDL_Surface *surface)
 	// Use linear filtering
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-}
-
-void Texture::SetActive()
-{
-	GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
 }
 
 void Texture::Bind(unsigned int slot /*= 0*/) const

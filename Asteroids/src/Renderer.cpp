@@ -1,6 +1,6 @@
 #include "Renderer.h"
 #include "Texture.h"
-#include "GameEngine\EntitySystem\Components\SpriteComponent.h"
+#include "GameEngine/EntitySystem/Components/SpriteComponent.h"
 #include <GL/glew.h>
 #include <iostream>
 #include <fstream>
@@ -112,10 +112,12 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 void Renderer::CreateSpriteVerts()
 {
 	float positions[] = {
-		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
+		// vertice position and texture coordinates
+		// Most texture image formats start at the top row
+		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,  // bottom left
+		 0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f, 0.0f, 0.0f, 0.0f
 	};
 
 	unsigned int indices[] = {
@@ -148,7 +150,7 @@ void Renderer::CreateSpriteVerts()
 
 void Renderer::LoadShaders()
 {
-	m_spriteShader = new Shader("res/shaders/Basic.shader");
+	m_spriteShader = new Shader("res/shaders/Transform.shader");
 	m_spriteShader->Bind();
 	//m_spriteShader->SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
 
@@ -156,12 +158,13 @@ void Renderer::LoadShaders()
 	texture.Load("Assets/Ship01.png");
 	texture.Bind(); // slot 0
 	m_spriteShader->SetUniform1i("u_texture", 0);
+	Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1920, 1080);
+	m_spriteShader->SetUniformMat4f("u_viewProj", viewProj);
 
 }
 
 void Renderer::Shutdown()
 {
-
 	SDL_GL_DeleteContext(mMainContext);
 	SDL_DestroyWindow(mMainWindow);
 }

@@ -3,7 +3,7 @@
 #include "Tile.h"
 #include "Search.h"
 #include "World.h"
-#include "Math.h"
+#include "src/Vendor/Math.h"
 
 enum class GameState
 {

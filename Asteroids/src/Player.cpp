@@ -21,9 +21,13 @@ Player::Player(Game *game)
 	//};
 	//anim->SetAnimTextures(textures);
 
+	// Sprite component
+	SpriteComponent *spriteComponent = new SpriteComponent(this);
+	spriteComponent->SetTexture(game->GetTexture("Assets/Ship.png"));
+
 	// Wireframe component
-	WireframeComponent *wireframe = new WireframeComponent(this);
-	wireframe->mVertices = { Vector2(0,-24), Vector2(18,24), Vector2(0,18), Vector2(-18,24), Vector2(0,-24) };
+	/*WireframeComponent *wireframe = new WireframeComponent(this);
+	wireframe->mVertices = { Vector2(0,-24), Vector2(18,24), Vector2(0,18), Vector2(-18,24), Vector2(0,-24) };*/
 
 	// Create input component
 	InputComponent *input = new InputComponent(this);

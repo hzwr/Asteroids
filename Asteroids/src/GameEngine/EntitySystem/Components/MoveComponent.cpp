@@ -30,22 +30,22 @@ void MoveComponent::Update(float deltaTime)
 		
 		
 		// Screen wrapping
-		if (pos.x < 0.0f)
+		if (pos.x < -960.0f)
 		{
-			pos.x = 1918.0f;
+			pos.x = 958.0f;
 		}
-		else if (pos.x > 1920.0f)
+		else if (pos.x > 960.0f)
 		{
-			pos.x = 2.0f;
+			pos.x = -958.0f;
 		}
 
-		if (pos.y < 0.0f)
+		if (pos.y < -540.0f)
 		{
-			pos.y = 1078.0f;
+			pos.y = 538.0f;
 		}
-		else if (pos.y > 1080.0f)
+		else if (pos.y > 540.0f)
 		{
-			pos.y = 2.0f;
+			pos.y = -538.0f;
 		}
 		
 		mOwner->SetPosition(pos);

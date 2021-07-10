@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\Vendor\Random.cpp" />
     <ClCompile Include="src\GameEngine\EntitySystem\Actor.cpp" />
     <ClCompile Include="src\GameEngine\EntitySystem\Components\AnimSpriteComponent.cpp" />
@@ -19,7 +20,6 @@
     <ClCompile Include="src\Canvas.cpp" />
     <ClCompile Include="src\GameEngine\EntitySystem\Components\ColliderComponent.cpp" />
     <ClCompile Include="src\GameEngine\EntitySystem\Component.cpp" />
-    <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\GameEngine\EntitySystem\Components\InputComponent.cpp" />
@@ -41,6 +41,7 @@
     <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Vendor\Random.h" />
     <ClInclude Include="src\GameEngine\EntitySystem\Actor.h" />
     <ClInclude Include="src\GameEngine\EntitySystem\Components\AnimSpriteComponent.h" />
@@ -49,7 +50,6 @@
     <ClInclude Include="src\Canvas.h" />
     <ClInclude Include="src\GameEngine\EntitySystem\Components\ColliderComponent.h" />
     <ClInclude Include="src\GameEngine\EntitySystem\Component.h" />
-    <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\GameEngine\EntitySystem\Components\InputComponent.h" />
@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\Transform.shader" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BC508D87-495F-4554-932D-DD68388B63CC}</ProjectGuid>

@@ -2,6 +2,7 @@
 #include "../Actor.h"
 #include "src/Game.h"
 #include "src/Texture.h"
+#include "src/Shader.h"
 
 SpriteComponent::SpriteComponent(Actor *owner, int drawOrder)
 	:Component(owner)
@@ -20,6 +21,20 @@ SpriteComponent::~SpriteComponent()
 
 void SpriteComponent::Draw(Shader *shader)
 {
+	// Sclae the quad by the width/height of the texture
+	Matrix4 scale = Matrix4::CreateScale(
+		static_cast<float>(mTexWidth),
+		static_cast<float>(mTexHeight),
+		1.0f
+	);
+	Matrix4 worldTransform = scale * mOwner->GetWorldTransform();
+
+	// Set world transform
+	shader->SetUniformMat4f("u_worldTransform", worldTransform);
+	
+	// Set current texture
+	mTexture->Bind();
+
 	// Draw quad
 	GLCall(glDrawElements(
 		GL_TRIANGLES,

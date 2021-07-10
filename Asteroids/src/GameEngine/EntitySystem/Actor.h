@@ -39,6 +39,9 @@ public:
 	float GetRotation() const { return m_rotation; }
 	void SetRotation(float rotation) { m_rotation = rotation;  m_recomputeWorldTransform = true; }
 
+	void ComputeWorldTransform();
+	const Matrix4& GetWorldTransform() const { return m_worldTransform; }
+
 private:
 	ActorState m_state;
 	float m_scale;
@@ -46,7 +49,7 @@ private:
 	Vector2 m_position;
 	Matrix4 m_worldTransform;
 	bool m_recomputeWorldTransform = true;
-	std::vector<class Component *> mComponents;
+	std::vector<class Component *> m_components;
 	class Game *mGame;
 
 };

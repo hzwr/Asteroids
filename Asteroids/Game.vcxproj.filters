@@ -61,9 +61,6 @@
     <ClCompile Include="src\Vendor\Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Font.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -91,6 +88,9 @@
     <ClCompile Include="src\Vendor\Random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -114,7 +114,6 @@
     <ClInclude Include="src\GameEngine\EntitySystem\Components\WireframeComponent.h" />
     <ClInclude Include="src\Bullet.h" />
     <ClInclude Include="src\GameEngine\EntitySystem\Components\ColliderComponent.h" />
-    <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\UIScreen.h" />
     <ClInclude Include="src\Renderer.h" />
@@ -124,8 +123,10 @@
     <ClInclude Include="src\VertexBufferLayout.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Vendor\Random.h" />
+    <ClInclude Include="src\Font.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\Transform.shader" />
   </ItemGroup>
 </Project>

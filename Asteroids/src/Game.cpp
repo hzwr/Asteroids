@@ -76,7 +76,8 @@ bool Game::Initialize()
 	//mRenderer = SDL_CreateRenderer(
 	//	mWindow, // Window to create renderer for
 	//	-1,		 // Usually -1
-	//	SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
+	//	SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENT
+	// YNC
 	//);
 
 
@@ -98,7 +99,7 @@ bool Game::Initialize()
 
 	// Create player - ship
 	mPlayer = new Player(this);
-	mPlayer->SetPosition(Vector2(810.0f, 500.0f));
+	mPlayer->SetPosition(Vector2(0.0f, 0.0f));
 	mPlayer->SetScale(1.5f);
 	mPlayer->SetRotation(Math::PiOver2);
 
@@ -365,27 +366,6 @@ Font *Game::GetFont(const std::string &fileName)
 void Game::PushUI(UIScreen *screen)
 {
 	mUIStack.emplace_back(screen);
-}
-
-SDL_Texture *LoadTexture(SDL_Renderer *renderer, const std::string &fileName)
-{
-	SDL_Surface *surface = IMG_Load(fileName.c_str());
-	if (!surface)
-	{
-		SDL_Log("Failed to load texture file %s", fileName.c_str());
-		return nullptr;
-	}
-
-	// Create texture from surface
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_FreeSurface(surface);
-	if (!texture)
-	{
-		SDL_Log("Failed to convert surface to texture for %s", fileName.c_str());
-		return nullptr;
-	}
-
-	return texture;
 }
 
 const std::string &Game::GetText(const std::string &textKey)
