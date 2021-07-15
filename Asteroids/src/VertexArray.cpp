@@ -4,7 +4,6 @@
 #include <iostream>
 #include "Renderer.h"
 
-
 VertexArray::VertexArray()
 {
 	GLCall(glGenVertexArrays(1, &m_VAO));
@@ -36,6 +35,7 @@ void VertexArray::Unbind() const
 
 void VertexArray::AddBuffer(const VertexBuffer &vb, const VertexBufferLayout &layout)
 {
+	//m_vb = vb.GetVertexBufferID();
 	Bind();
 	vb.Bind();
 

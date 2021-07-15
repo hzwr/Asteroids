@@ -11,12 +11,12 @@ SpriteComponent::SpriteComponent(Actor *owner, int drawOrder)
 	,mTexWidth(0)
 	,mTexHeight(0)
 {
-	mOwner->GetGame()->GetRenderer()->AddSprite(this);
+	m_owner->GetGame()->GetRenderer()->AddSprite(this);
 }
 
 SpriteComponent::~SpriteComponent()
 {
-	mOwner->GetGame()->GetRenderer()->RemoveSprite(this);
+	m_owner->GetGame()->GetRenderer()->RemoveSprite(this);
 }
 
 void SpriteComponent::Draw(Shader *shader)
@@ -27,7 +27,7 @@ void SpriteComponent::Draw(Shader *shader)
 		static_cast<float>(mTexHeight),
 		1.0f
 	);
-	Matrix4 worldTransform = scale * mOwner->GetWorldTransform();
+	Matrix4 worldTransform = scale * m_owner->GetWorldTransform();
 
 	// Set world transform
 	shader->SetUniformMat4f("u_worldTransform", worldTransform);

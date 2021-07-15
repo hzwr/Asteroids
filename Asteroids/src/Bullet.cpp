@@ -7,20 +7,20 @@
 #include "GameEngine\EntitySystem\Components\ColliderComponent.h"
 #include "GameEngine\EntitySystem\Components\SpriteComponent.h"
 
-Bullet::Bullet(Game *game, float rotation)
+Bullet::Bullet(Game *game, Quaternion rotation)
 	:Actor(game)
 	,mTimer(1.5f)
 {
 
 	// Move component
 	MoveComponent *move = new MoveComponent(this);
-	move->mForwardSpeed = 5.0f;
+	move->SetForwardSpeed(5.0f);
 	SetRotation(rotation);
 	move->mVelocityVector = GetForward() * 100;
 
 	// Sprite component
 	SpriteComponent *spriteComponent = new SpriteComponent(this);
-	spriteComponent->SetTexture(game->GetTexture("Assets/Laser.png"));
+	spriteComponent->SetTexture(game->GetRenderer()->GetTexture("Assets/Laser.png"));
 
 	// Wireframe component
 	//WireframeComponent *wireframe = new WireframeComponent(this);
@@ -37,7 +37,7 @@ Bullet::Bullet(Game *game, float rotation)
 	// collision detection for each bullet against all asteroids
 
 	mCollider = new ColliderComponent(this);
-	mCollider->mRadius = 2.0f;
+	mCollider->m_radius = 2.0f;
 }
 
 void Bullet::UpdateActor(float deltaTime)

@@ -23,7 +23,7 @@ Player::Player(Game *game)
 
 	// Sprite component
 	SpriteComponent *spriteComponent = new SpriteComponent(this);
-	spriteComponent->SetTexture(game->GetTexture("Assets/Ship.png"));
+	spriteComponent->SetTexture(game->GetRenderer()->GetTexture("Assets/Ship.png"));
 
 	// Wireframe component
 	/*WireframeComponent *wireframe = new WireframeComponent(this);
@@ -40,7 +40,7 @@ Player::Player(Game *game)
 
 	// Collider component
 	mCollider = new ColliderComponent(this);
-	mCollider->mRadius = 24.0f;
+	mCollider->m_radius = 24.0f;
 }
 
 void Player::UpdateActor(float deltaTime)

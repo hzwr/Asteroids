@@ -9,6 +9,7 @@ public:
 	void Unbind() const;
 
 	unsigned int GetIndexBufferID() const { return m_indexBufferID; }
+	unsigned int GetNumIndices() const { return m_numIndices; }
 
 private:
 	unsigned int m_indexBufferID;

@@ -23,7 +23,7 @@ public:
 	// Shutdown the game
 	void Shutdown();
 
-	class Texture *GetTexture(const std::string& fileName);
+
 
 	void AddActor(class Actor *actor);
 	void RemoveActor(class Actor *actor);
@@ -57,7 +57,7 @@ private:
 	GameState mGameState;
 
 	// Map of textures loaded
-	std::unordered_map<std::string, class Texture *> mTextures;
+	std::unordered_map<std::string, class Texture *> m_textures;
 
 	// Window created by SDL
 	SDL_Window *mWindow;
@@ -75,6 +75,7 @@ private:
 
 	// Game objects
 	class Player *mPlayer;
+	class Camera *m_mainCamera;
 	std::vector<class Asteroid *> mAsteroids;
 	std::vector<class Bullet *> mBullets;
 	std::vector<class Actor *> mActors;

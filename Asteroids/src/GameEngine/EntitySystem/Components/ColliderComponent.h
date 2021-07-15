@@ -8,9 +8,9 @@ class ColliderComponent :
 public:
     ColliderComponent(class Actor *owner);
 
-    const Vector2 &GetCenter() const;
+    const Vector3 &GetCenter() const;
 
-    float mRadius;
+    float m_radius;
 };
 
 bool Intersect(const ColliderComponent &a, const ColliderComponent &b);

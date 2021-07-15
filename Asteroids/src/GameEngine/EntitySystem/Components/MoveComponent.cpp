@@ -7,7 +7,7 @@ MoveComponent::MoveComponent(Actor *owner, int updateOrder)
 	:Component(owner, updateOrder)
 	,mAngularSpeed(0.0f)
 	,mForwardSpeed(1.0f)
-	,mVelocityVector( Vector2(0.0f, 0.0f))
+	,mVelocityVector(Vector3(0.0f, 0.0f, 0.0f))
 {
 }
 
@@ -16,16 +16,18 @@ void MoveComponent::Update(float deltaTime)
 	// Update rotation
 	if (!Math::NearZero(mAngularSpeed))
 	{
-		float rotation = mOwner->GetRotation();
-		rotation += mAngularSpeed * deltaTime;
-		mOwner->SetRotation(rotation);
+		Quaternion rot = m_owner->GetRotation();
+		float angle = mAngularSpeed * deltaTime;
+		Quaternion inc(Vector3::UnitZ, angle);	
+		rot = Quaternion::Concatenate(rot, inc); 
+		m_owner->SetRotation(rot);
 		/*std::cout << std::to_string(mOwner->mRotation) << std::endl;*/
 	}
 
 	// Update position
 	if (!Math::NearZero(mVelocityVector.x * mVelocityVector.x + mVelocityVector.y * mVelocityVector.y))
 	{
-		Vector2 pos = mOwner->GetPosition();
+		Vector3 pos = m_owner->GetPosition();
 		pos += mVelocityVector * mForwardSpeed * deltaTime;
 		
 		
@@ -48,6 +50,6 @@ void MoveComponent::Update(float deltaTime)
 			pos.y = -538.0f;
 		}
 		
-		mOwner->SetPosition(pos);
+		m_owner->SetPosition(pos);
 	}
 }

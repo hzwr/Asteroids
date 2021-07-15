@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include "GameEngine/EntitySystem/Components/SpriteComponent.h"
+#include "GameEngine/EntitySystem/Components/MeshComponent.h"
 #include <GL/glew.h>
 #include <iostream>
 #include <fstream>
@@ -8,6 +9,7 @@
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
+#include "src/Mesh.h"
 
 void GLClearError()
 {
@@ -77,6 +79,10 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 		return false;
 	}
 
+	// Request a depth buffer before creating the OpenGL context
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); // 24-bit is a typical size
+
+
 	// Create OpenGL context and attach it to our window
 	mMainContext = SDL_GL_CreateContext(mMainWindow);
 
@@ -103,8 +109,9 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
 	LoadShaders();
+
 	// Create VAO
-	CreateSpriteVerts();
+	//CreateSpriteVerts();
 
 	return true;
 }
@@ -114,10 +121,10 @@ void Renderer::CreateSpriteVerts()
 	float positions[] = {
 		// vertice position and texture coordinates
 		// Most texture image formats start at the top row
-		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,  // bottom left
-		 0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f, 0.0f, 0.0f, 0.0f
+		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,  // bottom left
+		 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
 	};
 
 	unsigned int indices[] = {
@@ -129,14 +136,15 @@ void Renderer::CreateSpriteVerts()
 	// all sprites use the same vertices
 	m_VAO = new VertexArray();
 
-	// Create and bind vertex buffer
 
-	VertexBuffer vb(positions, 4 * 5 * sizeof(float));
 	// Specify vertex attributes
-	// Create and bind index buffer
 	VertexBufferLayout layout;
-	layout.Push<float>(3);
-	layout.Push<float>(2);
+	layout.Push<float>(3); // position
+	layout.Push<float>(3); // normal
+	layout.Push<float>(2); // texture
+
+	// Create and bind vertex buffer
+	VertexBuffer vb(positions, 4 * layout.GetStride());
 
 	// Bind VAO and add vertex buffer to it
 	m_VAO->AddBuffer(vb, layout);
@@ -154,12 +162,25 @@ void Renderer::LoadShaders()
 	m_spriteShader->Bind();
 	//m_spriteShader->SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
 
-	Texture texture;
-	texture.Load("Assets/Ship01.png");
-	texture.Bind(); // slot 0
-	m_spriteShader->SetUniform1i("u_texture", 0);
-	Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1920, 1080);
-	m_spriteShader->SetUniformMat4f("u_viewProj", viewProj);
+	//m_spriteShader->SetUniform1i("u_texture", 0);
+	//Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1920, 1080);
+	//m_spriteShader->SetUniformMat4f("u_viewProj", viewProj);
+
+	m_meshShader = new Shader("res/shaders/Transform.shader");
+	m_meshShader->Bind();
+	m_view = Matrix4::CreateLookAt(
+		Vector3::Zero,
+		Vector3::UnitX,
+		Vector3::UnitZ
+	);
+	m_proj = Matrix4::CreatePerspectiveFOV(
+		Math::ToRadians(70.0f),
+		mScreenWidth,
+		mScreenHeight,
+		25.0f,
+		10000.0f
+	);
+	m_meshShader->SetUniformMat4f("u_viewProj", m_view * m_proj);
 
 }
 
@@ -173,16 +194,35 @@ void Renderer::Draw()
 {
 	// Set the clear color to gray
 	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
-	// Clear the color buffer
-	glClear(GL_COLOR_BUFFER_BIT);
 
-	m_spriteShader->Bind();
+	// Clear the color and depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+	m_meshShader->Bind();
+	m_meshShader->SetUniformMat4f("u_viewProj", m_view * m_proj);
+
+	for (auto mesh : m_meshComps)
+	{
+		mesh->Draw(m_meshShader);
+	}
+
+	// Draw all sprite components
+	// Disable depth buffering
+	glDisable(GL_DEPTH_TEST);
+	// Enable alpha blending on the color buffer
+	glEnable(GL_BLEND);
+	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+
+
+	/*m_spriteShader->Bind();
 	m_VAO->Bind();
 
 	for (auto sprite : mSprites)
 	{
 		sprite->Draw(m_spriteShader);
-	}
+	}*/
 
 	//for (auto wireframe : mWireframes)
 	//{
@@ -222,4 +262,63 @@ void Renderer::RemoveSprite(SpriteComponent *sprite)
 {
 	auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
 	mSprites.erase(iter);
+}
+
+void Renderer::AddMeshComp(MeshComponent *mesh)
+{
+	m_meshComps.emplace_back(mesh);
+}
+
+void Renderer::RemoveMeshComp(MeshComponent *mesh)
+{
+	auto iter = std::find(m_meshComps.begin(), m_meshComps.end(), mesh);
+	m_meshComps.erase(iter);
+}
+
+Texture *Renderer::GetTexture(const std::string &fileName)
+{
+	Texture *tex = nullptr;
+	auto iter = m_textures.find(fileName);
+	if (iter != m_textures.end())
+	{
+		tex = iter->second;
+	}
+	else
+	{
+		tex = new Texture();
+		if (tex->Load(fileName))
+		{
+			m_textures.emplace(fileName, tex);
+		}
+		else
+		{
+			delete tex;
+			tex = nullptr;
+		}
+	}
+	return tex;
+}
+
+Mesh *Renderer::GetMesh(const std::string &fileName)
+{
+	Mesh *m = nullptr;
+	auto iter = m_meshes.find(fileName);
+	if (iter != m_meshes.end())
+	{
+		m = iter->second;
+	}
+	else
+	{
+		m = new Mesh();
+		if (m->Load(fileName, this))
+		{
+			m_meshes.emplace(fileName, m);
+		}
+		else
+		{
+			delete m;
+			m = nullptr;
+		}
+	}
+	return m;
 }

@@ -4,7 +4,7 @@ class Bullet:
 	public Actor
 {
 public:
-	Bullet(class Game *game, float rotation);
+	Bullet(class Game *game, Quaternion rotation);
 	void UpdateActor(float deltaTime) override;
 
 private:

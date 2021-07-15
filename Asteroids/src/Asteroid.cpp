@@ -13,13 +13,14 @@ Asteroid::Asteroid(Game *game)
 	,mCollider(nullptr)
 {
 	// Random position
-	Vector2 randPos = Random::GetVector(Vector2(-960.0f, -540.0f),
-		Vector2(960.0f, 540.0f));
+	Vector3 randPos = Random::GetVector(Vector3(-960.0f, -540.0f,0.0f),
+		Vector3(960.0f, 540.0f, 0.0f));
 	//Vector2 randPos(-960, -540);
 	//Vector2 randPos(0, 0);
 	SetPosition(randPos);
 
-	SetRotation(Random::GetFloatRange(0.0f, Math::TwoPi));
+	float angle = Random::GetFloatRange(0.0f, Math::TwoPi);
+	SetRotation(Quaternion(Vector3::UnitZ, angle));
 
 	// Wireframe component
 	//WireframeComponent *wireframe = new WireframeComponent(this);
@@ -35,13 +36,13 @@ Asteroid::Asteroid(Game *game)
 
 	// Sprite component
 	SpriteComponent *spriteComponent = new SpriteComponent(this);
-	spriteComponent->SetTexture(game->GetTexture("Assets/Asteroid.png"));
+	spriteComponent->SetTexture(game->GetRenderer()->GetTexture("Assets/Asteroid.png"));
 
 	MoveComponent *moveComponent = new MoveComponent(this);
 	moveComponent->mVelocityVector = GetForward() * 150;
 
 	mCollider = new ColliderComponent(this);
-	mCollider->mRadius = radius;
+	mCollider->m_radius = radius;
 
 	game->AddAsteroid(this);
 }

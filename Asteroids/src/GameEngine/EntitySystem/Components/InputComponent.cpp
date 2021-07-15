@@ -21,7 +21,7 @@ void InputComponent::ProcessInput(const uint8_t *keyState)
 		// Thurst 
 		// Update velocity
 		// TODO: velocity should be updated using acceleration * time
-		mVelocityVector += mOwner->GetForward() * 10;
+		mVelocityVector += m_owner->GetForward() * 10;
 	}
 	if (keyState[mBackKey])
 	{
@@ -38,5 +38,5 @@ void InputComponent::ProcessInput(const uint8_t *keyState)
 	{
 		angularSpeed += mMaxAngularSpeed;
 	}
-	mAngularSpeed = angularSpeed;
+	SetAngularSpeed(angularSpeed);
 }

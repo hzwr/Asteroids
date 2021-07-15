@@ -4,23 +4,23 @@
 
 ColliderComponent::ColliderComponent(Actor *owner)
     :Component(owner)
-    ,mRadius(0.0f)
+    ,m_radius(0.0f)
 {
 }
 
-const Vector2 &ColliderComponent::GetCenter() const
+const Vector3 &ColliderComponent::GetCenter() const
 {
-    return mOwner->GetPosition();
+    return m_owner->GetPosition();
 }
 
 bool Intersect(const ColliderComponent &a, const ColliderComponent &b)
 {
     // Calculate distance squared
-    Vector2 diff = a.GetCenter() - b.GetCenter();
+    Vector3 diff = a.GetCenter() - b.GetCenter();
     float distSq = diff.LengthSq();
 
     // Calculate sum of radii squared
-    float radiiSq = a.mRadius + b.mRadius;
+    float radiiSq = a.m_radius + b.m_radius;
     radiiSq *= radiiSq;
 
     return distSq <= radiiSq;

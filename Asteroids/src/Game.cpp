@@ -6,6 +6,7 @@
 #include "GameEngine/EntitySystem/Actor.h"
 #include "GameEngine/EntitySystem/Components/SpriteComponent.h"
 #include "GameEngine/EntitySystem/Components/WireframeComponent.h"
+#include "GameEngine/EntitySystem/Components/MeshComponent.h"
 #include "Player.h"
 #include "Asteroid.h"
 #include "GameEngine/EntitySystem/Components/ColliderComponent.h"
@@ -19,6 +20,7 @@
 #include "VertexBufferLayout.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Camera.h"
 
 Game::Game()
 :mWindow(nullptr)
@@ -98,20 +100,32 @@ bool Game::Initialize()
 	// Gameplay
 
 	// Create player - ship
-	mPlayer = new Player(this);
-	mPlayer->SetPosition(Vector2(0.0f, 0.0f));
-	mPlayer->SetScale(1.5f);
-	mPlayer->SetRotation(Math::PiOver2);
+	//mPlayer = new Player(this);
+	//mPlayer->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	//mPlayer->SetScale(1.5f);
+	//mPlayer->SetRotation(Quaternion(Vector3::UnitZ, Math::PiOver2));
 
-	// Create asteroids
-	const int numAsteroids = 20;
-	for (int i = 0; i < numAsteroids; ++i)
-	{
-		new Asteroid(this);
-	}
+	//// Create asteroids
+	//const int numAsteroids = 20;
+	//for (int i = 0; i < numAsteroids; ++i)
+	//{
+	//	new Asteroid(this);
+	//}
+
+	// Create actors
+	Actor *a = new Actor(this);
+	a->SetPosition(Vector3(200.0f, 75.0f, 0.0f));
+	a->SetScale(100.0f);
+	Quaternion q(Vector3::UnitY, -Math::PiOver2);
+	q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, Math::Pi + Math::Pi / 4.0f));
+	a->SetRotation(q);
+	MeshComponent *mc = new MeshComponent(a);
+	mc->SetMesh(mRenderer->GetMesh("Assets/Cube.gpmesh"));
+
+	// camera
+	m_mainCamera = new Camera(this);
 
 
-	
 	return true;
 
 }
@@ -384,26 +398,3 @@ const std::string &Game::GetText(const std::string &textKey)
 }
 
 
-Texture *Game::GetTexture(const std::string &fileName)
-{
-	Texture *tex = nullptr;
-	auto iter = mTextures.find(fileName);
-	if (iter != mTextures.end())
-	{
-		tex = iter->second;
-	}
-	else
-	{
-		tex = new Texture();
-		if (tex->Load(fileName))
-		{
-			mTextures.emplace(fileName, tex);
-		}
-		else
-		{
-			delete tex;
-			tex = nullptr;
-		}
-	}
-	return tex;
-}

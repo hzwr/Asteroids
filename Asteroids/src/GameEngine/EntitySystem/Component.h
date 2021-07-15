@@ -14,6 +14,6 @@ public:
 	int mUpdateOrder;
 
 protected:
-	class Actor *mOwner;
+	class Actor *m_owner;
 };
 
