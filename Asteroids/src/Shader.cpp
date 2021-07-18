@@ -40,9 +40,9 @@ void Shader::SetUniform1f(const std::string &name, float value)
 	GLCall(glUniform1f(GetUniformLocation(name), value));
 }
 
-void Shader::SetUniform4f(const std::string &name, float v0, float v1, float v2, float v3)
+void Shader::SetUniform4f(const std::string &name, float f0, float f1, float f2, float f3)
 {
-	GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
+	GLCall(glUniform4f(GetUniformLocation(name), f0, f1, f2, f3));
 }
 
 void Shader::SetUniformMat4f(const std::string &name, const Matrix4 &mat)
@@ -50,9 +50,14 @@ void Shader::SetUniformMat4f(const std::string &name, const Matrix4 &mat)
 	GLCall(glUniformMatrix4fv(
 		GetUniformLocation(name),
 		1,	// number of matrices
-		GL_TRUE, // set to true if using row major
+		GL_TRUE, // set to true if using row vector
 		mat.GetAsFloatPtr()
 		))
+}
+
+void Shader::SetUniform3fv(const std::string &name, const Vector3 &vector)
+{
+	GLCall(glUniform3fv(GetUniformLocation(name), 1, vector.GetAsFloatPtr()));
 }
 
 int Shader::GetUniformLocation(const std::string &name)

@@ -158,8 +158,8 @@ void Renderer::CreateSpriteVerts()
 
 void Renderer::LoadShaders()
 {
-	m_spriteShader = new Shader("res/shaders/Transform.shader");
-	m_spriteShader->Bind();
+	//m_spriteShader = new Shader("res/shaders/Transform.shader");
+	//m_spriteShader->Bind();
 	//m_spriteShader->SetUniform4f("u_color", 0.8f, 0.3f, 0.8f, 1.0f);
 
 	//m_spriteShader->SetUniform1i("u_texture", 0);
@@ -192,8 +192,8 @@ void Renderer::Shutdown()
 
 void Renderer::Draw()
 {
-	// Set the clear color to gray
-	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+	// Set the clear color
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// Clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -201,7 +201,8 @@ void Renderer::Draw()
 	glDisable(GL_BLEND);
 	m_meshShader->Bind();
 	m_meshShader->SetUniformMat4f("u_viewProj", m_view * m_proj);
-
+	
+	SetLightUniforms(m_meshShader);
 	for (auto mesh : m_meshComps)
 	{
 		mesh->Draw(m_meshShader);
@@ -321,4 +322,23 @@ Mesh *Renderer::GetMesh(const std::string &fileName)
 		}
 	}
 	return m;
+}
+
+void Renderer::SetLightUniforms(Shader *shader)
+{
+	// Get camera position in world-space coordiante by inverting the view matrix
+	Matrix4 invView = m_view;
+	invView.Invert();
+	shader->SetUniform3fv("u_cameraPos", invView.GetTranslation());
+
+	// Ambient light
+	shader->SetUniform3fv("u_ambientLight", m_ambientLight);
+	// Directional light
+	shader->SetUniform3fv("u_dirLight.m_direction",
+		m_dirLight.m_direction);
+	shader->SetUniform3fv("u_dirLight.m_diffuseColor",
+		m_dirLight.m_diffuseColor);
+	shader->SetUniform3fv("u_dirLight.m_specColor",
+		m_dirLight.m_specColor);
+
 }

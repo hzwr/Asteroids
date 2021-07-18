@@ -113,14 +113,34 @@ bool Game::Initialize()
 	//}
 
 	// Create actors
+	//Actor *a = new Actor(this);
+	//a->SetPosition(Vector3(200.0f, 75.0f, 0.0f));
+	//a->SetScale(100.0f);
+	//Quaternion q(Vector3::UnitY, -Math::PiOver2);
+	//q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, Math::Pi + Math::Pi / 4.0f));
+	//a->SetRotation(q);
+	//MeshComponent *mc = new MeshComponent(a);
+	//mc->SetMesh(mRenderer->GetMesh("Assets/Cube.gpmesh"));
+
 	Actor *a = new Actor(this);
-	a->SetPosition(Vector3(200.0f, 75.0f, 0.0f));
-	a->SetScale(100.0f);
-	Quaternion q(Vector3::UnitY, -Math::PiOver2);
-	q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, Math::Pi + Math::Pi / 4.0f));
-	a->SetRotation(q);
+	a->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
+	a->SetScale(3.0f);
 	MeshComponent *mc = new MeshComponent(a);
-	mc->SetMesh(mRenderer->GetMesh("Assets/Cube.gpmesh"));
+	mc->SetMesh(mRenderer->GetMesh("Assets/Sphere.gpmesh"));
+
+	a = new Actor(this);
+	a->SetPosition(Vector3(160.0f, 0.0f, 0.0f));
+	a->SetScale(3.0f);
+	mc = new MeshComponent(a);
+	mc->SetMesh(mRenderer->GetMesh("Assets/Sphere.gpmesh"));
+
+
+	// Setup lights
+	mRenderer->SetAmbientLight(Vector3(0.3f, 0.3f, 0.3f));
+	DirectionalLight &dir = mRenderer->GetDirectionalLight();
+	dir.m_direction = Vector3(0.0f, -0.707f, -0.707f);
+	dir.m_diffuseColor = Vector3(0.78f, 0.88f, 1.0f);
+	dir.m_specColor = Vector3(0.8f, 0.8f, 0.8f);
 
 	// camera
 	m_mainCamera = new Camera(this);

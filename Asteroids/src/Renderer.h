@@ -21,6 +21,12 @@ void GLClearError();
 bool GLLogCall(const char *function, const char *file, int line);
 //-----------------------------------------------------------------------------
 
+struct DirectionalLight
+{
+	Vector3 m_direction;
+	Vector3 m_diffuseColor;
+	Vector3 m_specColor;
+};
 
 class Renderer
 {
@@ -46,8 +52,11 @@ public:
 	class Texture *GetTexture(const std::string &fileName);
 	class Mesh *GetMesh(const std::string &fileName);
 
-	void SetViewMatrix(const Matrix4 &view) { m_view = view; }
+	void SetAmbientLight(const Vector3 &ambient) { m_ambientLight = ambient; }
+	DirectionalLight &GetDirectionalLight() { return m_dirLight; }
 
+	void SetViewMatrix(const Matrix4 &view) { m_view = view; }
+	void SetLightUniforms(class Shader *shader);
 
 private:
 	void Renderer::CreateSpriteVerts();
@@ -65,6 +74,10 @@ private:
 	class Shader *m_meshShader;
 	Matrix4 m_view;
 	Matrix4 m_proj;
+
+	// Lighting
+	Vector3 m_ambientLight;
+	DirectionalLight m_dirLight;
 
 	std::vector<class MeshComponent *> m_meshComps;
 

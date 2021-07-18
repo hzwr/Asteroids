@@ -25,31 +25,31 @@ void MoveComponent::Update(float deltaTime)
 	}
 
 	// Update position
-	if (!Math::NearZero(mVelocityVector.x * mVelocityVector.x + mVelocityVector.y * mVelocityVector.y))
+	if (!Math::NearZero(mForwardSpeed))	// forward and velocity vector always face the same direction
 	{
 		Vector3 pos = m_owner->GetPosition();
-		pos += mVelocityVector * mForwardSpeed * deltaTime;
+		pos += m_owner->GetForward() * mForwardSpeed * deltaTime;
 		
-		
-		// Screen wrapping
-		if (pos.x < -960.0f)
-		{
-			pos.x = 958.0f;
-		}
-		else if (pos.x > 960.0f)
-		{
-			pos.x = -958.0f;
-		}
+		//
+		//// Screen wrapping
+		//if (pos.x < -960.0f)
+		//{
+		//	pos.x = 958.0f;
+		//}
+		//else if (pos.x > 960.0f)
+		//{
+		//	pos.x = -958.0f;
+		//}
 
-		if (pos.y < -540.0f)
-		{
-			pos.y = 538.0f;
-		}
-		else if (pos.y > 540.0f)
-		{
-			pos.y = -538.0f;
-		}
-		
+		//if (pos.y < -540.0f)
+		//{
+		//	pos.y = 538.0f;
+		//}
+		//else if (pos.y > 540.0f)
+		//{
+		//	pos.y = -538.0f;
+		//}
+		//
 		m_owner->SetPosition(pos);
 	}
 }
