@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
-#include "src/Vendor/Math.h"
+#include "math/Math.h"
+#include <SDL/SDL.h>
 
 enum class ActorState
 {
@@ -24,6 +25,7 @@ public:
 
 	class Game *GetGame() const { return mGame; }
 	Vector3 GetForward() const { return Vector3::Transform(Vector3::UnitX, m_rotation); }
+	Vector3 GetRight() const { return Vector3::Transform(Vector3::UnitY, m_rotation); }
 
 	// Input
 	void ProcessInput(const uint8_t *keyState); // Process input on all components and call actor-specific input
@@ -33,7 +35,7 @@ public:
 	ActorState GetState() const { return m_state; }
 	void SetState(ActorState state) { m_state = state; }
 	const Vector3 &GetPosition() const { return m_position; }
-	void SetPosition(const Vector3 &pos) { m_position = pos; m_recomputeWorldTransform = true; }
+	void SetPosition(const Vector3 &pos) { SDL_Log("x: %f",m_position.x); SDL_Log("y: %f", m_position.y); SDL_Log("z: %f", m_position.z);  m_position = pos; m_recomputeWorldTransform = true; }
 	float GetScale() const { return m_scale; }
 	void SetScale(float scale) { m_scale = scale;  m_recomputeWorldTransform = true; }
 	Quaternion GetRotation() const { return m_rotation; }

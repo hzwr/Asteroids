@@ -1,6 +1,6 @@
 #include "Asteroid.h"
 #include "Game.h"
-#include "src/Vendor/Random.h"
+#include "Vendor/Random.h"
 #include "GameEngine/EntitySystem/Components/MoveComponent.h"
 #include "GameEngine/EntitySystem/Components/SpriteComponent.h"
 #include "GameEngine/EntitySystem/Components/WireframeComponent.h"

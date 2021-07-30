@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "src/GameEngine/EntitySystem/Components/MoveComponent.h"
+#include "GameEngine/EntitySystem/Components/MoveComponent.h"
 #include "Game.h"
 #include "Renderer.h"
 
@@ -28,26 +28,32 @@ void Camera::UpdateActor(float deltaTime)
 void Camera::ActorInput(const uint8_t *keys)
 {
 	float forwardSpeed = 0.0f;
-	float angularSpeed = 0.0f;
+	//float angularSpeed = 0.0f;
+	float strafeSpeed = 0.0f;
+
 	// wasd movement
 	if (keys[SDL_SCANCODE_W])
 	{
-		forwardSpeed += 300.0f;
+		forwardSpeed += 30.0f;
 	}
 	if (keys[SDL_SCANCODE_S])
 	{
-		forwardSpeed -= 300.0f;
+		forwardSpeed -= 30.0f;
 	}
 	if (keys[SDL_SCANCODE_A])
 	{
-		angularSpeed -= Math::TwoPi;
+		//angularSpeed -= Math::TwoPi;
+		strafeSpeed -= 30.0f;
+		
 	}
 	if (keys[SDL_SCANCODE_D])
 	{
-		angularSpeed += Math::TwoPi;
+		//angularSpeed += Math::TwoPi;
+		strafeSpeed += 30.0f;
 	}
 
 	m_moveComp->SetForwardSpeed(forwardSpeed);
-	m_moveComp->SetAngularSpeed(angularSpeed);
+	m_moveComp->SetStrafeSpeed(strafeSpeed);
+	//m_moveComp->SetAngularSpeed(angularSpeed);
 
 }

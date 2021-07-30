@@ -2,8 +2,8 @@
 	"version":1,
 	"vertexformat":"PosNormTex",
 	"shader":"BasicMesh",
-	"textures":[
-		"Assets/Plane.png"
+	"textures": [
+		"Assets/Sphere.png"
 	],
 	"specularPower":100.0,
 	"vertices":[

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "src/Vendor/Math.h"
+#include "math/Math.h"
 #include <unordered_map>
 #include <SDL/SDL_ttf.h>
 

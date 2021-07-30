@@ -1,8 +1,8 @@
 #include "SpriteComponent.h"
 #include "../Actor.h"
-#include "src/Game.h"
-#include "src/Texture.h"
-#include "src/Shader.h"
+#include "Game.h"
+#include "Texture.h"
+#include "Shader.h"
 
 SpriteComponent::SpriteComponent(Actor *owner, int drawOrder)
 	:Component(owner)

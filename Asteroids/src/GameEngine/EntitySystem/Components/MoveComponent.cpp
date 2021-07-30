@@ -5,8 +5,8 @@
 
 MoveComponent::MoveComponent(Actor *owner, int updateOrder)
 	:Component(owner, updateOrder)
-	,mAngularSpeed(0.0f)
-	,mForwardSpeed(1.0f)
+	,m_angularSpeed(0.0f)
+	,m_forwardSpeed(1.0f)
 	,mVelocityVector(Vector3(0.0f, 0.0f, 0.0f))
 {
 }
@@ -14,10 +14,10 @@ MoveComponent::MoveComponent(Actor *owner, int updateOrder)
 void MoveComponent::Update(float deltaTime)
 {
 	// Update rotation
-	if (!Math::NearZero(mAngularSpeed))
+	if (!Math::NearZero(m_angularSpeed))
 	{
 		Quaternion rot = m_owner->GetRotation();
-		float angle = mAngularSpeed * deltaTime;
+		float angle = m_angularSpeed * deltaTime;
 		Quaternion inc(Vector3::UnitZ, angle);	
 		rot = Quaternion::Concatenate(rot, inc); 
 		m_owner->SetRotation(rot);
@@ -25,11 +25,12 @@ void MoveComponent::Update(float deltaTime)
 	}
 
 	// Update position
-	if (!Math::NearZero(mForwardSpeed))	// forward and velocity vector always face the same direction
+	if (!Math::NearZero(m_forwardSpeed) || !Math::NearZero(m_strafeSpeed))	// forward and velocity vector always face the same direction
 	{
 		Vector3 pos = m_owner->GetPosition();
-		pos += m_owner->GetForward() * mForwardSpeed * deltaTime;
-		
+		pos += m_owner->GetForward() * m_forwardSpeed * deltaTime;
+		pos += m_owner->GetRight() * m_strafeSpeed * deltaTime;
+
 		//
 		//// Screen wrapping
 		//if (pos.x < -960.0f)

@@ -3,161 +3,84 @@
 #include <sstream>
 #include <SDL/SDL_log.h>
 #include <rapidjson/document.h>
-#include "src/Renderer.h"
-#include "src/VertexArray.h"
-#include "src/Vendor/Math.h"
-#include "src/VertexBufferLayout.h"
-#include "src/VertexBuffer.h"
-#include "src/IndexBuffer.h"
+#include "Renderer.h"
+#include "VertexArray.h"
+#include "math/Math.h"
+#include "VertexBufferLayout.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "Shader.h"
+#include "texture.h"
 
-Mesh::Mesh()
+Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<unsigned int> indices, std::vector<class Texture *>textures)
+	:m_textures(textures)
 {
+	VertexBufferLayout layout;
+	layout.Push<float>(3); // position
+	layout.Push<float>(3); // normal
+	layout.Push<float>(2); // texture
+	size_t vertSize = 8;
+
+	// Create and bind vertex buffer
+	m_vertexBuffer = new VertexBuffer(
+		vertices.data(),
+		static_cast<unsigned>(vertices.size()) * layout.GetStride()
+	);
+
+	m_vertexArray = new VertexArray();
+
+	// Bind vao and add buffer
+	m_vertexArray->AddBuffer(
+		*m_vertexBuffer,
+		layout); 
+
+	m_indexBuffer = new IndexBuffer(
+		indices.data(),
+		indices.size()
+	);
 }
 
 Mesh::~Mesh()
 {
 }
 
-bool Mesh::Load(const std::string &fileName, Renderer *renderer)
+void Mesh::Draw(Shader *shader, const Matrix4 &worldTransform)
 {
-    std::ifstream file(fileName);
-    if (!file.is_open())
-    {
-        SDL_Log("File not found: Mesh %s", fileName.c_str());
-        return false;
-    }
-	std::stringstream fileStream;
-	fileStream << file.rdbuf();
-	std::string contents = fileStream.str();
-	rapidjson::StringStream jsonStr(contents.c_str());
-	rapidjson::Document doc;
-	doc.ParseStream(jsonStr);
+	// Set the world transform
+	shader->SetUniformMat4f("u_worldTransform", worldTransform);
 
-	if (!doc.IsObject())
+	unsigned int diffuseNr = 1;
+	unsigned int specularNr = 1;
+	for (unsigned int i = 0; i < m_textures.size(); i++)
 	{
-		SDL_Log("Mesh %s is not valid json", fileName.c_str());
-		return false;
-	}
-
-	int ver = doc["version"].GetInt();
-
-	// Check the version
-	if (ver != 1)
-	{
-		SDL_Log("Mesh %s not version 1", fileName.c_str());
-		return false;
-	}
-
-	m_shaderName = doc["shader"].GetString();
-
-	// Skip the vertex format/shader for now
-	// (This is changed in a later chapter's code)
-	size_t vertSize = 8;
-
-	// Load textures
-	const rapidjson::Value &textures = doc["textures"];
-	if (!textures.IsArray() || textures.Size() < 1)
-	{
-		SDL_Log("Mesh %s has no textures, there should be at least one", fileName.c_str());
-		return false;
-	}
-
-	m_specPower = static_cast<float>(doc["specularPower"].GetDouble());
-
-	for (rapidjson::SizeType i = 0; i < textures.Size(); i++)
-	{
-		// Is this texture already loaded?
-		std::string texName = textures[i].GetString();
-		Texture *t = renderer->GetTexture(texName);
-		if (t == nullptr)
+		// retrieve texture number (the N in diffuse_textureN)
+		std::string number;
+		std::string name;
+		if (m_textures[i]->GetTextureType() == TextureType::EDiffuse)
 		{
-			// Try loading the texture
-			t = renderer->GetTexture(texName);
-			if (t == nullptr)
-			{
-				// If it's still null, just use the default texture
-				t = renderer->GetTexture("Assets/Default.png");
-			}
+			name = "texture_diffuse";
+			number = std::to_string(diffuseNr++);
 		}
-		m_textures.emplace_back(t);
-	}
-
-	// Load in the vertices
-	const rapidjson::Value &vertsJson = doc["vertices"];
-	if (!vertsJson.IsArray() || vertsJson.Size() < 1)
-	{
-		SDL_Log("Mesh %s has no vertices", fileName.c_str());
-		return false;
-	}
-
-	std::vector<float> vertices;
-	vertices.reserve(vertsJson.Size() * vertSize);
-	m_radius = 0.0f;
-	for (rapidjson::SizeType i = 0; i < vertsJson.Size(); i++)
-	{
-		// For now, just assume we have 8 elements
-		const rapidjson::Value &vert = vertsJson[i];
-		if (!vert.IsArray() || vert.Size() != 8)
+		else if (m_textures[i]->GetTextureType() == TextureType::ESpecular)
 		{
-			SDL_Log("Unexpected vertex format for %s", fileName.c_str());
-			return false;
+			name = "texture_specular";
+			number = std::to_string(specularNr++);
 		}
 
-		Vector3 pos(vert[0].GetDouble(), vert[1].GetDouble(), vert[2].GetDouble());
-		m_radius = Math::Max(m_radius, pos.LengthSq());
+		shader->SetUniform1i((name + number).c_str(), i);
 
-		// Add the floats
-		for (rapidjson::SizeType i = 0; i < vert.Size(); i++)
-		{
-			vertices.emplace_back(static_cast<float>(vert[i].GetDouble()));
-		}
+		m_textures[i]->Bind(i);
+
 	}
 
-	// We were computing length squared earlier
-	m_radius = Math::Sqrt(m_radius);
-
-	// Load in the indices
-	const rapidjson::Value &indJson = doc["indices"];
-	if (!indJson.IsArray() || indJson.Size() < 1)
-	{
-		SDL_Log("Mesh %s has no indices", fileName.c_str());
-		return false;
-	}
-
-	std::vector<unsigned int> indices;
-	indices.reserve(indJson.Size() * 3);
-	for (rapidjson::SizeType i = 0; i < indJson.Size(); i++)
-	{
-		const rapidjson::Value &ind = indJson[i];
-		if (!ind.IsArray() || ind.Size() != 3)
-		{
-			SDL_Log("Invalid indices for %s", fileName.c_str());
-			return false;
-		}
-
-		indices.emplace_back(ind[0].GetUint());
-		indices.emplace_back(ind[1].GetUint());
-		indices.emplace_back(ind[2].GetUint());
-	}
-
-	// Now create a vertex array
-	//m_vertexArray = new VertexArray(vertices.data(), static_cast<unsigned>(vertices.size()) / vertSize,
-	//	indices.data(), static_cast<unsigned>(indices.size()));
-
-	VertexBufferLayout layout;
-	layout.Push<float>(3); // position
-	layout.Push<float>(3); // normal
-	layout.Push<float>(2); // texture
-
-	// Create and bind vertex buffer
-	m_vertexBuffer = new VertexBuffer(vertices.data(), static_cast<unsigned>(vertices.size())/vertSize * layout.GetStride());
-	m_vertexArray = new VertexArray();
-
-	m_vertexArray->AddBuffer(*m_vertexBuffer, layout); // bind vao and add buffer
-
-	m_indexBuffer = new IndexBuffer(indices.data(), indices.size());
-
-	return true;
+	VertexArray *vao = GetVertexArray();
+	vao->Bind();
+	glDrawElements(
+		GL_TRIANGLES,
+		GetIndexBuffer()->GetNumIndices(),
+		GL_UNSIGNED_INT,
+		nullptr
+	);
 }
 
 void Mesh::Unload()

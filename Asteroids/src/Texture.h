@@ -1,6 +1,12 @@
 #pragma once
 #include <string>
 
+enum class TextureType
+{
+	EDiffuse,
+	ESpecular
+};
+
 class Texture
 {
 public:
@@ -21,7 +27,11 @@ public:
 
 	int GetWidth() const { return mWidth; }
 	int GetHeight() const { return mHeight; }
+
+	TextureType GetTextureType() const { return m_textureType; }
+	void SetTextureType(TextureType type) { m_textureType = type; }
 private:
+	TextureType m_textureType = TextureType::EDiffuse;
 	unsigned int m_textureID = 0;
 	int mWidth;
 	int mHeight;

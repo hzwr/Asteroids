@@ -1,6 +1,6 @@
 #pragma once
 #include "../Component.h"
-#include "src/Vendor/Math.h"
+#include "math/Math.h"
 
 class ColliderComponent :
     public Component

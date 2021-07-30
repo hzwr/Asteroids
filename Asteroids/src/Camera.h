@@ -1,5 +1,5 @@
 #pragma once
-#include "src/GameEngine/EntitySystem/Actor.h"
+#include "GameEngine/EntitySystem/Actor.h"
 
 class Camera
 	:public Actor

@@ -1,13 +1,13 @@
 #include "MeshComponent.h"
-#include "src/GameEngine//EntitySystem/Actor.h"
-#include "src/Game.h"
-#include "src/Renderer.h"
-#include "src/Shader.h"
-#include "src/Mesh.h"
-#include "src/Texture.h"
-#include "src/VertexArray.h"
-#include "src/VertexBuffer.h"
-#include "src/IndexBuffer.h"
+#include "GameEngine/EntitySystem/Actor.h"
+#include "Game.h"
+#include "Renderer.h"
+#include "Shader.h"
+#include "Mesh.h"
+#include "Texture.h"
+#include "VertexArray.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 MeshComponent::MeshComponent(Actor *owner)
 	:Component(owner)

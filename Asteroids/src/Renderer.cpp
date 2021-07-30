@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include "GameEngine/EntitySystem/Components/SpriteComponent.h"
 #include "GameEngine/EntitySystem/Components/MeshComponent.h"
+#include "GameEngine/EntitySystem/Components/ModelComponent.h"
 #include <GL/glew.h>
 #include <iostream>
 #include <fstream>
@@ -9,7 +10,9 @@
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
-#include "src/Mesh.h"
+#include "Mesh.h"
+#include "Model.h"
+
 
 void GLClearError()
 {
@@ -105,13 +108,42 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 	glGetError();
 
 	// GL blend
-	GLCall(glEnable(GL_BLEND));
-	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+	/*GLCall(glEnable(GL_BLEND));
+	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));*/
 
 	LoadShaders();
 
-	// Create VAO
 	//CreateSpriteVerts();
+
+
+	// For shadows
+	//-----------------------------------------------------------------------------
+
+
+	unsigned int m_depthMapFBO;
+	glGenFramebuffers(1, &m_depthMapFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_depthMapFBO);
+
+	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+
+	// Create depth map texture
+	unsigned int depthMap;
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+		SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//
+	//
 
 	return true;
 }
@@ -177,11 +209,10 @@ void Renderer::LoadShaders()
 		Math::ToRadians(70.0f),
 		mScreenWidth,
 		mScreenHeight,
-		25.0f,
-		10000.0f
+		1.0f,
+		127.5f
 	);
 	m_meshShader->SetUniformMat4f("u_viewProj", m_view * m_proj);
-
 }
 
 void Renderer::Shutdown()
@@ -190,31 +221,51 @@ void Renderer::Shutdown()
 	SDL_DestroyWindow(mMainWindow);
 }
 
+void Renderer::UnloadData()
+{
+	for (auto model : m_models)
+	{
+		model.second->Unload();
+		delete model.second;
+	}
+	m_models.clear();
+}
+
 void Renderer::Draw()
 {
+
 	// Set the clear color
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
 	// Clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
+
 	m_meshShader->Bind();
 	m_meshShader->SetUniformMat4f("u_viewProj", m_view * m_proj);
-	
 	SetLightUniforms(m_meshShader);
-	for (auto mesh : m_meshComps)
+	//
+
+	//for (auto mesh : m_meshComps)
+	//{
+	//	mesh->Draw(m_meshShader);
+	//}
+
+	for (auto model : m_modelComps)
 	{
-		mesh->Draw(m_meshShader);
+		model->Draw(m_meshShader);
 	}
+
+
 
 	// Draw all sprite components
 	// Disable depth buffering
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 	// Enable alpha blending on the color buffer
-	glEnable(GL_BLEND);
-	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+	//glEnable(GL_BLEND);
+	/*glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);*/
 
 
 	/*m_spriteShader->Bind();
@@ -276,6 +327,17 @@ void Renderer::RemoveMeshComp(MeshComponent *mesh)
 	m_meshComps.erase(iter);
 }
 
+void Renderer::AddModelComp(ModelComponent *model)
+{
+	m_modelComps.emplace_back(model);
+}
+
+void Renderer::RemoveModelComp(ModelComponent *model)
+{
+	auto iter = std::find(m_modelComps.begin(), m_modelComps.end(), model);
+	m_modelComps.erase(iter);
+}
+
 Texture *Renderer::GetTexture(const std::string &fileName)
 {
 	Texture *tex = nullptr;
@@ -302,18 +364,44 @@ Texture *Renderer::GetTexture(const std::string &fileName)
 
 Mesh *Renderer::GetMesh(const std::string &fileName)
 {
-	Mesh *m = nullptr;
-	auto iter = m_meshes.find(fileName);
-	if (iter != m_meshes.end())
+//	Mesh *m = nullptr;
+//	auto iter = m_meshes.find(fileName);
+//	if (iter != m_meshes.end())
+//	{
+//		m = iter->second;
+//	}
+//	else
+//	{
+//		m = new Mesh();
+//		if (m->Load(fileName, this))
+//		{
+//			m_meshes.emplace(fileName, m);
+//		}
+//		else
+//		{
+//			delete m;
+//			m = nullptr;
+//		}
+//	}
+//	return m;
+
+	return nullptr;
+}
+
+Model *Renderer::GetModel(const std::string &filePath)
+{
+	Model *m = nullptr;
+	auto iter = m_models.find(filePath);
+	if (iter != m_models.end())
 	{
 		m = iter->second;
 	}
 	else
 	{
-		m = new Mesh();
-		if (m->Load(fileName, this))
+		m = new Model();
+		if (m->Load(filePath, this))
 		{
-			m_meshes.emplace(fileName, m);
+			m_models.emplace(filePath, m);
 		}
 		else
 		{

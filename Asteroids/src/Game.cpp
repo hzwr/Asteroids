@@ -7,6 +7,7 @@
 #include "GameEngine/EntitySystem/Components/SpriteComponent.h"
 #include "GameEngine/EntitySystem/Components/WireframeComponent.h"
 #include "GameEngine/EntitySystem/Components/MeshComponent.h"
+#include "GameEngine/EntitySystem/Components/ModelComponent.h"
 #include "Player.h"
 #include "Asteroid.h"
 #include "GameEngine/EntitySystem/Components/ColliderComponent.h"
@@ -21,6 +22,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Camera.h"
+#include "Plane.h"
 
 Game::Game()
 :mWindow(nullptr)
@@ -112,39 +114,58 @@ bool Game::Initialize()
 	//	new Asteroid(this);
 	//}
 
-	// Create actors
-	//Actor *a = new Actor(this);
-	//a->SetPosition(Vector3(200.0f, 75.0f, 0.0f));
-	//a->SetScale(100.0f);
-	//Quaternion q(Vector3::UnitY, -Math::PiOver2);
-	//q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, Math::Pi + Math::Pi / 4.0f));
-	//a->SetRotation(q);
+	Actor *a = new Actor(this);
+	a->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	Quaternion q = Quaternion(Vector3::UnitY, -Math::PiOver2);
+	a->SetRotation(q);
+	a->SetScale(5.0f);
+	
+	ModelComponent *modelComp = new ModelComponent(a);
+	modelComp->SetModel(mRenderer->GetModel("Assets/backpack/backpack.obj"));
+
 	//MeshComponent *mc = new MeshComponent(a);
 	//mc->SetMesh(mRenderer->GetMesh("Assets/Cube.gpmesh"));
 
-	Actor *a = new Actor(this);
-	a->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
-	a->SetScale(3.0f);
-	MeshComponent *mc = new MeshComponent(a);
-	mc->SetMesh(mRenderer->GetMesh("Assets/Sphere.gpmesh"));
+	//a = new Actor(this);
+	//a->SetPosition(Vector3(2.0f, 0.0f, 1.0f));
+	//a->SetScale(1.0f);
+	//mc = new MeshComponent(a);
+	//mc->SetMesh(mRenderer->GetMesh("Assets/Cube.gpmesh"));
 
-	a = new Actor(this);
-	a->SetPosition(Vector3(160.0f, 0.0f, 0.0f));
-	a->SetScale(3.0f);
-	mc = new MeshComponent(a);
-	mc->SetMesh(mRenderer->GetMesh("Assets/Sphere.gpmesh"));
+	//a = new Actor(this);
+	//a->SetPosition(Vector3(1.0f, 3.0f, 2.0f));
+	//a->SetScale(0.05f);
+	//mc = new MeshComponent(a);
+	//mc->SetMesh(mRenderer->GetMesh("Assets/Sphere.gpmesh"));
 
+	//a = new Actor(this);
+	//a->SetPosition(Vector3(400.0f, 300.0f, 200.0f));
+	//a->SetScale(3.0f);
+	//mc = new MeshComponent(a);
+	//mc->SetMesh(mRenderer->GetMesh("Assets/Sphere.gpmesh"));
+
+	// Setup floor
+	//const float start = -1250.0f;
+	//const float size = 250.0f;
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	for (int j = 0; j < 10; j++)
+	//	{
+	//		a = new Plane(this);
+	//		a->SetPosition(Vector3(start + i * size, start + j * size, -100.0f));
+	//	}
+	//}
 
 	// Setup lights
 	mRenderer->SetAmbientLight(Vector3(0.3f, 0.3f, 0.3f));
 	DirectionalLight &dir = mRenderer->GetDirectionalLight();
-	dir.m_direction = Vector3(0.0f, -0.707f, -0.707f);
+	dir.m_direction = Vector3(0.3f, -0.707f, -0.607f);
 	dir.m_diffuseColor = Vector3(0.78f, 0.88f, 1.0f);
 	dir.m_specColor = Vector3(0.8f, 0.8f, 0.8f);
 
 	// camera
 	m_mainCamera = new Camera(this);
-
+	m_mainCamera->SetPosition(Vector3(-7.0f, 0.0f, 0.0f));
 
 	return true;
 
@@ -282,12 +303,17 @@ void Game::GenerateOutput()
 
 void Game::Shutdown()
 {
-	// TODO: delete buffers
+	
 
-	// Delete actors
+	// Clean up
 	while (!mActors.empty())
 	{
 		delete mActors.back();
+	}
+
+	if (mRenderer)
+	{
+		mRenderer->UnloadData();
 	}
 
 	TTF_Quit();

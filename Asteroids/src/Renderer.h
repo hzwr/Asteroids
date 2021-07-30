@@ -3,7 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include <SDL/SDL.h>
-#include "src/Vendor/Math.h"
+#include "math/Math.h"
 #include <GL/glew.h>
 
 
@@ -46,11 +46,17 @@ public:
 	void AddMeshComp(class MeshComponent *mesh);
 	void RemoveMeshComp(class MeshComponent *mesh);
 
+	void AddModelComp(class ModelComponent *model);
+	void RemoveModelComp(class ModelComponent *model);
+
 	float GetScreenWidth() const { return mScreenWidth; }
 	float GetScreenHeight() const { return mScreenHeight; }
 
 	class Texture *GetTexture(const std::string &fileName);
 	class Mesh *GetMesh(const std::string &fileName);
+	class Model *Renderer::GetModel(const std::string &filePath);
+
+	unsigned int GetDepthMapFBO() const { return m_depthMapFBO; }
 
 	void SetAmbientLight(const Vector3 &ambient) { m_ambientLight = ambient; }
 	DirectionalLight &GetDirectionalLight() { return m_dirLight; }
@@ -66,12 +72,15 @@ private:
 	std::unordered_map<std::string, class Texture *> m_textures;
 	// Map of meshes loaded
 	std::unordered_map<std::string, class Mesh *> m_meshes;
+	// Map of model loaded
+	std::unordered_map<std::string, class Model *> m_models;
+
 
 	// All the sprite components drawn
 	std::vector<class SpriteComponent *> mSprites;
 	class Shader *m_spriteShader;
-
 	class Shader *m_meshShader;
+	class Shader *m_simpleDepthShader;
 	Matrix4 m_view;
 	Matrix4 m_proj;
 
@@ -80,8 +89,10 @@ private:
 	DirectionalLight m_dirLight;
 
 	std::vector<class MeshComponent *> m_meshComps;
+	std::vector<class ModelComponent *> m_modelComps;
 
 	class VertexArray *m_VAO;
+	unsigned int m_depthMapFBO;
 
 	class Game *mGame;
 	// Width/height of screen

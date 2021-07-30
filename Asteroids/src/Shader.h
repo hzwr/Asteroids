@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
-#include "src/Vendor/Math.h"
+#include "math/Math.h"
 
 struct ShaderProgramSource
 {

@@ -17,6 +17,7 @@ void main()
 
 	vec4 pos = vec4(in_position, 1.0);
 	gl_Position = pos * u_worldTransform * u_viewProj;
+	//gl_Position = pos;
 
 	pos = pos * u_worldTransform;
 	out_worldPos = pos.xyz;
@@ -43,7 +44,7 @@ in vec3 out_worldNormal;
 in vec3 out_worldPos;
 
 uniform vec4 u_color;
-uniform sampler2D u_texture;
+uniform sampler2D texture_diffuse1;
 uniform vec3 u_cameraPos;
 uniform vec3 u_ambientLight;
 uniform float u_specPower;
@@ -51,7 +52,7 @@ uniform DirectionalLight u_dirLight;
 
 void main()
 {
-	vec3 N = normalize(out_worldNormal);
+	/*vec3 N = normalize(out_worldNormal);
 	vec3 L = normalize(-u_dirLight.m_direction);
 	vec3 V = normalize(u_cameraPos - out_worldPos);
 	vec3 R = normalize(reflect(-L, N));
@@ -63,7 +64,9 @@ void main()
 		vec3 Diffuse = u_dirLight.m_diffuseColor * NdotL;
 		vec3 Specular = u_dirLight.m_specColor * pow(max(0.0, dot(R, V)), u_specPower);
 		Phong += Diffuse + Specular;
-	}
+	}*/
 
-	out_color = texture(u_texture, out_texCoord) * vec4(Phong, 1.0f);;
+	//out_color = texture(texture_diffuse1, out_texCoord) * vec4(Phong, 1.0f);;
+	out_color = texture(texture_diffuse1, out_texCoord);
+	//out_color = vec4(0.1, 0.8, 0.8, 1.0);
 };

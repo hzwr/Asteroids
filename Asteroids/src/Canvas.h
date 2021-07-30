@@ -3,7 +3,7 @@
 #include <string>
 #include <functional>
 #include <vector>
-#include "src/Vendor/Math.h"
+#include "math/Math.h"
 
 class Button
 {

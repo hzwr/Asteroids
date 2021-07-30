@@ -3,7 +3,7 @@
 #include "Tile.h"
 #include "Search.h"
 #include "World.h"
-#include "src/Vendor/Math.h"
+#include "math/Math.h"
 
 enum class GameState
 {
@@ -22,8 +22,6 @@ public:
 	void RunLoop();
 	// Shutdown the game
 	void Shutdown();
-
-
 
 	void AddActor(class Actor *actor);
 	void RemoveActor(class Actor *actor);

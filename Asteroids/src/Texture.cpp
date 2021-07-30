@@ -30,29 +30,46 @@ bool Texture::Load(const std::string &fileName)
 		return false;
 	}
 
-	int format = GL_RGB;
-	if (channels == 4)
-	{
-		format = GL_RGBA;
-	}
 
 	GLCall(glGenTextures(1, &m_textureID));
-	GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
+	//GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
 
-	// Copy image data to OpenGL
-	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format,
-		GL_UNSIGNED_BYTE, image));
+	//// Copy image data to OpenGL
+	//GLCall(glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format,
+	//	GL_UNSIGNED_BYTE, image));
 
+
+	//// Enable linear filtering
+	//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+	//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+	//// Wrap mode
+	//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+	//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+
+
+
+	//NEW
+	// 
+	if (image)
+	{
+		int format = GL_RGB;
+		if (channels == 4)
+		{
+			format = GL_RGBA;
+		}
+
+		glBindTexture(GL_TEXTURE_2D, m_textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, image);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+	// 
 	// Free the image from memory
 	SOIL_free_image_data(image);
-
-	// Enable linear filtering
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-	// Wrap mode
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-
 	return true;
 }
 
