@@ -73,19 +73,19 @@ void Actor::RemoveComponent(Component *component)
 	}
 }
 
-void Actor::ProcessInput(const uint8_t *keyState)
+void Actor::ProcessInput(const InputState &state)
 {
 	if (m_state == ActorState::EActive)
 	{
 		for (auto comp : m_components)
 		{
-			comp->ProcessInput(keyState);
+			comp->ProcessInput(state);
 		}
-		ActorInput(keyState); // Actor specific input
+		ActorInput(state); // Actor specific input
 	}
 }
 
-void Actor::ActorInput(const uint8_t *keyState)
+void Actor::ActorInput(const InputState &state)
 {
 }
 
@@ -96,7 +96,7 @@ void Actor::ComputeWorldTransform()
 		m_recomputeWorldTransform = false;
 		m_worldTransform = Matrix4::CreateScale(m_scale);
 		float mat[4][4] = { {0,1,0,0}, {1,0,0,0}, {0,0,1,0},{0,0,0,1} };
-		Matrix4 leftToRight = Matrix4(mat);
+		Matrix4 leftToRight = Matrix4(mat); // change basis from blender coordiante system
 		m_worldTransform *= leftToRight;
 		m_worldTransform *= Matrix4::CreateFromQuaternion(m_rotation);
 		m_worldTransform *= Matrix4::CreateTranslation(m_position);

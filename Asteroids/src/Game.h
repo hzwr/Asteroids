@@ -91,4 +91,7 @@ private:
 	std::unordered_map<std::string, std::string> mText; // Actual texts
 
 	std::vector<class UIScreen *> mUIStack;
+
+	// Input
+	class InputSystem *m_inputSystem;
 };

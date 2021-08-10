@@ -31,8 +31,8 @@ Player::Player(Game *game)
 
 	// Create input component
 	InputComponent *input = new InputComponent(this);
-	input->mForwardKey = SDL_SCANCODE_W;
-	input->mBackKey = SDL_SCANCODE_S;
+	input->SetForwardKey( SDL_SCANCODE_W);
+	//input->mBackKey = SDL_SCANCODE_S;
 	input->mClockwiseKey = SDL_SCANCODE_D;
 	input->mCounterClockwiseKey = SDL_SCANCODE_A;
 	input->mMaxForwardSpeed = 30.0f;
@@ -48,13 +48,13 @@ void Player::UpdateActor(float deltaTime)
 	mWeaponCooldown -= deltaTime;
 }
 
-void Player::ActorInput(const uint8_t *keyState)
+void Player::ActorInput(const InputState &state)
 {
-	if (keyState[SDL_SCANCODE_SPACE] && mWeaponCooldown <= 0.0f)
-	{
-		Bullet *bullet = new Bullet(GetGame(), GetRotation());
-		bullet->SetPosition(GetPosition());	// Instantiate a bullet at the ship's postition
-	
-		mWeaponCooldown = 0.5f;
-	}
+	//if (keyState[SDL_SCANCODE_SPACE] && mWeaponCooldown <= 0.0f)
+	//{
+	//	Bullet *bullet = new Bullet(GetGame(), GetRotation());
+	//	bullet->SetPosition(GetPosition());	// Instantiate a bullet at the ship's postition
+	//
+	//	mWeaponCooldown = 0.5f;
+	//}
 }

@@ -8,7 +8,7 @@ public:
 	Camera(class Game *game);
 
 	void UpdateActor(float deltaTime) override;
-	void ActorInput(const uint8_t *keys) override;
+	void ActorInput(const InputState &state) override;
 private:
 	class MoveComponent *m_moveComp;
 

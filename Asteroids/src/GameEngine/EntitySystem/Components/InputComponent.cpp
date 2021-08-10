@@ -3,7 +3,7 @@
 
 InputComponent::InputComponent(class Actor *owner)
 	:MoveComponent(owner)
-	, mForwardKey(0)
+	, m_forwardKey(0)
 	, mBackKey(0)
 	, mClockwiseKey(0)
 	, mCounterClockwiseKey(0)
@@ -14,29 +14,25 @@ InputComponent::InputComponent(class Actor *owner)
 
 }
 
-void InputComponent::ProcessInput(const uint8_t *keyState)
+void InputComponent::ProcessInput(const struct InputState &state)
 {
-	if (keyState[mForwardKey])
+	if (state.keyboard.GetKeyValue(SDL_SCANCODE_W))
 	{
 		// Thurst 
 		// Update velocity
 		// TODO: velocity should be updated using acceleration * time
 		mVelocityVector += m_owner->GetForward() * 10;
 	}
-	if (keyState[mBackKey])
-	{
-		
-	}
 
-	// Calculate angular speed for MoveComponent
-	float angularSpeed = 0.0f;
-	if (keyState[mClockwiseKey])
-	{
-		angularSpeed -= mMaxAngularSpeed;
-	}
-	if (keyState[mCounterClockwiseKey])
-	{
-		angularSpeed += mMaxAngularSpeed;
-	}
-	SetAngularSpeed(angularSpeed);
+	//// Calculate angular speed for MoveComponent
+	//float angularSpeed = 0.0f;
+	//if (keyState[mClockwiseKey])
+	//{
+	//	angularSpeed -= mMaxAngularSpeed;
+	//}
+	//if (keyState[mCounterClockwiseKey])
+	//{
+	//	angularSpeed += mMaxAngularSpeed;
+	//}
+	//SetAngularSpeed(angularSpeed);
 }

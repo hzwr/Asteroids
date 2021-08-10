@@ -2,6 +2,7 @@
 #include <vector>
 #include "math/Math.h"
 #include <SDL/SDL.h>
+#include "GameEngine/InputSystem/InputSystem.h"
 
 enum class ActorState
 {
@@ -28,8 +29,8 @@ public:
 	Vector3 GetRight() const { return Vector3::Transform(Vector3::UnitY, m_rotation); }
 
 	// Input
-	void ProcessInput(const uint8_t *keyState); // Process input on all components and call actor-specific input
-	virtual void ActorInput(const uint8_t *keyState); // Actor-specific input code
+	void ProcessInput(const InputState &state); // Process input on all components and call actor-specific input
+	virtual void ActorInput(const InputState &state); // Actor-specific input code
 	
 	// Getters/setters
 	ActorState GetState() const { return m_state; }

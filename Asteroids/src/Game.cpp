@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Asteroid.h"
 #include "GameEngine/EntitySystem/Components/ColliderComponent.h"
+#include "GameEngine/InputSystem/InputSystem.h"
 #include "Font.h"
 
 #include <GL/glew.h>
@@ -167,8 +168,12 @@ bool Game::Initialize()
 	m_mainCamera = new Camera(this);
 	m_mainCamera->SetPosition(Vector3(-7.0f, 0.0f, 0.0f));
 
-	return true;
 
+	// Input
+	m_inputSystem = new InputSystem();
+	m_inputSystem->Init();
+
+	return true;
 }
 
 void Game::RunLoop()
@@ -192,6 +197,8 @@ void Game::ProcessInput()
 	//	mIsPathFound = true;
 	//}
 
+	m_inputSystem->BeforeUpdate(); // save states keyboard/mouse 
+
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
@@ -210,9 +217,9 @@ void Game::ProcessInput()
 				//tiles[squareIndex].color.r = 0;
 		}
 	}
+	m_inputSystem->Update();
 	
-	// Get state of keyboard
-	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	const InputState &state = m_inputSystem->GetState();
 	
 	mIsUpdatingActors = true;
 	for (auto actor : mActors)
@@ -222,7 +229,7 @@ void Game::ProcessInput()
 	mIsUpdatingActors = false;
 	
 	// If escape is pressed, also end loop
-	if (state[SDL_SCANCODE_ESCAPE])
+	if (state.keyboard.GetKeyState(SDL_SCANCODE_ESCAPE) == ButtonState::RELEASED)
 	{
 		mIsRunning = false;
 	}
@@ -306,6 +313,9 @@ void Game::Shutdown()
 	
 
 	// Clean up
+	m_inputSystem->Shutdown();
+	delete m_inputSystem;
+
 	while (!mActors.empty())
 	{
 		delete mActors.back();

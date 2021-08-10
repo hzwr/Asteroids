@@ -9,7 +9,7 @@ public:
 	virtual ~Component();
 	virtual void OnUpdateWorldTransform() { }
 	virtual void Update(float deltaTime);
-	virtual void ProcessInput(const uint8_t *keyState);
+	virtual void ProcessInput(const struct InputState &state) {}
 	
 	int mUpdateOrder;
 
