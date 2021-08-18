@@ -52,7 +52,7 @@ uniform DirectionalLight u_dirLight;
 
 void main()
 {
-	/*vec3 N = normalize(out_worldNormal);
+	vec3 N = normalize(out_worldNormal);
 	vec3 L = normalize(-u_dirLight.m_direction);
 	vec3 V = normalize(u_cameraPos - out_worldPos);
 	vec3 R = normalize(reflect(-L, N));
@@ -63,10 +63,11 @@ void main()
 	{
 		vec3 Diffuse = u_dirLight.m_diffuseColor * NdotL;
 		vec3 Specular = u_dirLight.m_specColor * pow(max(0.0, dot(R, V)), u_specPower);
-		Phong += Diffuse + Specular;
-	}*/
+		Phong += Diffuse;
+	}
 
 	//out_color = texture(texture_diffuse1, out_texCoord) * vec4(Phong, 1.0f);;
-	out_color = texture(texture_diffuse1, out_texCoord);
+	vec2 texCoord = vec2(out_texCoord.x, 1.0 - out_texCoord.y);
+	out_color = texture(texture_diffuse1, texCoord) * vec4(Phong, 1.0f);
 	//out_color = vec4(0.1, 0.8, 0.8, 1.0);
 };

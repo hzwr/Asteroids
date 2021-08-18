@@ -25,6 +25,9 @@
 #include "Camera.h"
 #include "Plane.h"
 
+#include "FPSActor.h"
+#include "GameEngine/EntitySystem/ThirdPersonActor.h"
+
 Game::Game()
 :mWindow(nullptr)
 ,mRenderer(nullptr)
@@ -102,7 +105,7 @@ bool Game::Initialize()
 
 	// Gameplay
 
-	// Create player - ship
+//	 Create player - ship
 	//mPlayer = new Player(this);
 	//mPlayer->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	//mPlayer->SetScale(1.5f);
@@ -118,11 +121,14 @@ bool Game::Initialize()
 	Actor *a = new Actor(this);
 	a->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	Quaternion q = Quaternion(Vector3::UnitY, -Math::PiOver2);
-	a->SetRotation(q);
+	//a->SetRotation(q);
 	a->SetScale(5.0f);
 	
 	ModelComponent *modelComp = new ModelComponent(a);
-	modelComp->SetModel(mRenderer->GetModel("Assets/backpack/backpack.obj"));
+
+	modelComp->SetModel(mRenderer->GetModel("Assets/plane/plane.obj"));
+
+
 
 	//MeshComponent *mc = new MeshComponent(a);
 	//mc->SetMesh(mRenderer->GetMesh("Assets/Cube.gpmesh"));
@@ -165,13 +171,27 @@ bool Game::Initialize()
 	dir.m_specColor = Vector3(0.8f, 0.8f, 0.8f);
 
 	// camera
-	m_mainCamera = new Camera(this);
-	m_mainCamera->SetPosition(Vector3(-7.0f, 0.0f, 0.0f));
+	//m_mainCamera = new Camera(this);
+	//m_mainCamera->SetPosition(Vector3(-7.0f, 0.0f, 0.0f));
 
+	 //Player
+	FPSActor *m_FPSActor = new FPSActor(this);
+	m_FPSActor->SetPosition(Vector3(-53.0f, 0.0f, 1.0f));
+	q = Quaternion(Vector3::UnitZ, -Math::Pi);
+	m_FPSActor->SetRotation(q);
 
-	// Input
+	//ThirdPersonActor *actor = new ThirdPersonActor(this);
+
+	// Init Input System
 	m_inputSystem = new InputSystem();
-	m_inputSystem->Init();
+	if (!m_inputSystem->Init())
+	{
+		SDL_Log("Failed to initialize input system");
+		return false;
+	}
+
+	m_inputSystem->EnableRelativeMouse(true);
+
 
 	return true;
 }

@@ -112,6 +112,21 @@
     <ClCompile Include="src\Search.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\Camera\CameraComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\Camera\FirstPersonCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FPSActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\Camera\ThirdPersonCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameEngine\EntitySystem\ThirdPersonActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -434,6 +449,11 @@
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\GameEngine\EntitySystem\Components\ModelComponent.h" />
     <ClInclude Include="src\GameEngine\InputSystem\InputSystem.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\Camera\CameraComponent.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\Camera\FirstPersonCamera.h" />
+    <ClInclude Include="src\FPSActor.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\Camera\ThirdPersonCamera.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\ThirdPersonActor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />

@@ -210,7 +210,7 @@ void Renderer::LoadShaders()
 		mScreenWidth,
 		mScreenHeight,
 		1.0f,
-		127.5f
+		500.5f
 	);
 	m_meshShader->SetUniformMat4f("u_viewProj", m_view * m_proj);
 }

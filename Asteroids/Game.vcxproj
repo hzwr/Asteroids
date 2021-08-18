@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FPSActor.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\Camera\FirstPersonCamera.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\Camera\CameraComponent.cpp" />
     <ClCompile Include="src\GameEngine\EntitySystem\Components\ModelComponent.cpp" />
     <ClCompile Include="src\GameEngine\InputSystem\InputSystem.cpp" />
     <ClCompile Include="src\Model.cpp" />
@@ -54,8 +57,13 @@
     <ClCompile Include="src\VertexBuffer.cpp" />
     <ClCompile Include="src\GameEngine\EntitySystem\Components\WireframeComponent.cpp" />
     <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\Components\Camera\ThirdPersonCamera.cpp" />
+    <ClCompile Include="src\GameEngine\EntitySystem\ThirdPersonActor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\FPSActor.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\Camera\FirstPersonCamera.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\Camera\CameraComponent.h" />
     <ClInclude Include="src\GameEngine\EntitySystem\Components\ModelComponent.h" />
     <ClInclude Include="src\GameEngine\InputSystem\InputSystem.h" />
     <ClInclude Include="src\Model.h" />
@@ -372,6 +380,8 @@
     <ClInclude Include="src\VertexBufferLayout.h" />
     <ClInclude Include="src\GameEngine\EntitySystem\Components\WireframeComponent.h" />
     <ClInclude Include="src\World.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\Components\Camera\ThirdPersonCamera.h" />
+    <ClInclude Include="src\GameEngine\EntitySystem\ThirdPersonActor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
